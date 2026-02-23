@@ -1,5 +1,7 @@
 body {
     background-color: black;
+    margin : 0;
+    padding : 0;
 }
 
 h1 {
@@ -15,9 +17,12 @@ h1 {
 .box{
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding: 0;
     align-items: center;
     border-bottom: 1px solid yellowgreen;
+    box-sizing: border-box;
+    width : 100%;
+   
 }
 
 .left{
@@ -42,4 +47,13 @@ h1 {
     color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2em;
+}
+
+canvas{
+    display: block;
+    margin: 20px auto;
+    background-color: green;
+    border: 2px solid yellowgreen;
+    width : 100%;
+    
 }
