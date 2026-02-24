@@ -46,6 +46,9 @@ function gameloop(){
     alert("Game Over");
     snakeCol = 10;
     snakeRow = 10;
+    dx = 0;
+    dy = 0;
+    
 }
 
         }
@@ -56,11 +59,12 @@ snakeRow += dy;
 c.fillStyle = "pink";
 c.fillRect(snakeCol*unit,snakeRow*unit,unit,unit);
 }
-setInterval(gameloop,80);
+setInterval(gameloop,200);
 if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19){
     alert("Game Over");
     snakeCol = 10;
     snakeRow = 10;
+    console.log("Game Over");
 }
 
 console.log(canvas);
