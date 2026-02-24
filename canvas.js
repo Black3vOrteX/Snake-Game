@@ -10,7 +10,7 @@ canvas.height=size;
 var c = canvas.getContext("2d");
 
 c.fillStyle = "pink";
-c.strokeStyle = "white";
+c.strokeStyle = "black";
 
 const unit = 30;
 
@@ -55,7 +55,7 @@ function gameloop(){
     c.clearRect(0,0,canvas.width,canvas.height);
     for(let row = 0; row < 20; row ++){
         for(let col = 0; col < 20; col++){
-            c.strokeStyle = "white";
+            c.strokeStyle = "black";
             c.strokeRect(col*unit,row*unit,unit,unit);
         }
     }
