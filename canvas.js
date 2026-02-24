@@ -1,27 +1,34 @@
 
 var canvas = document.getElementById("gameCanvas");
-var header = document.getElementById("header");
+const size = 600;
+canvas.width=size;
+canvas.height=size;
 
-function resizeCanvas(){
-    var width = header.getBoundingClientRect().width;
-    canvas.width=width;
-    canvas.style.width=width + "px";
-    canvas.height=window.innerHeight;
-}
-resizeCanvas();
 
-canvas.width=900;
+
 
 var c = canvas.getContext("2d");
 c.fillStyle = "pink";
 c.fillRect(50,50,30,30);
-c.fillRect(100,50,30,30);
-c.fillRect(150,50,30,30);
-c.fillRect(200,50,30,30);
+c.strokeStyle = "black";
+c.strokeRect(50,50,30,30);
 
+var c = canvas.getContext("2d");
+c.fillStyle = "pink";
+c.fillRect(80,50,30,30);
+c.strokeStyle = "black";
+c.strokeRect(80,50,30,30);
 
+var c = canvas.getContext("2d");
+c.fillStyle = "pink";
+c.fillRect(110,50,30,30);
+c.strokeStyle = "black";
+c.strokeRect(110,50,30,30);
 
-
-
+var c = canvas.getContext("2d");
+c.fillStyle = "pink";
+c.fillRect(140,50,30,30);
+c.strokeStyle = "black";
+c.strokeRect(140,50,30,30);
 
 console.log(canvas);
