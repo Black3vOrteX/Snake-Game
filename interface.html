@@ -22,7 +22,7 @@
     <!-- Suggested to do dimension change in CSS-->
      <!-- Try doing either height or width -->
 <header>
-    <p><h1>SNAKE GAME</h1></p> 
+    <p><h1> SNAKE GAME </h1></p> 
     <!--- Heading for Name of the Game -->
 </header>
 
@@ -33,18 +33,23 @@
     <!--- Heading for the Login -->
 
     <form action="/index.html"
-    method="get">
-    <!--- get used instead of post for simplicity and for no confusion -->
-        <label for="username">Your Name:</label>
-        <input type="text" id="username" name="username" required><br><br>
+       method="get">
+        <!--- get used instead of post for simplicity and for no confusion -->
+        <label for="username">Name:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your Name" required><br><br>
        
         <input type="submit" value="Start Game">
-        </form>
+    </form>
         <!--- Login details -->
         
         <br><br> 
         
-     <link rel="stylesheet" href="loginin.css">  
+     <link rel="stylesheet" href="loginin.css"> 
+
+     <form action="/Leaderboard.html" method="post">
+        <output type="Game Over" value="Leaderboard">
+     <a href="Leaderboard.html">View Leaderboard</a>
+     <!--- Link to the CSS file and Leaderboard --> 
 
     </body>
 </html>
