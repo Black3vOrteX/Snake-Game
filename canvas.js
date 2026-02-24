@@ -17,7 +17,7 @@ const unit = 30;
 for(let row=0;row<20;row++){
     for(let col=0;col<20;col++)
         {
-        c.fillRect(col*unit,row*unit,unit,unit);
+         c.strokeStyle = "black";
         // c.fillRect(col*unit,row*unit,unit,unit);
         c.strokeRect(col*unit,row*unit,unit,unit);
     }
