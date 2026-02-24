@@ -8,27 +8,27 @@ canvas.height=size;
 
 
 var c = canvas.getContext("2d");
-c.fillStyle = "pink";
-c.fillRect(50,50,30,30);
-c.strokeStyle = "black";
-c.strokeRect(50,50,30,30);
 
-var c = canvas.getContext("2d");
 c.fillStyle = "pink";
-c.fillRect(80,50,30,30);
 c.strokeStyle = "black";
-c.strokeRect(80,50,30,30);
 
-var c = canvas.getContext("2d");
-c.fillStyle = "pink";
-c.fillRect(110,50,30,30);
-c.strokeStyle = "black";
-c.strokeRect(110,50,30,30);
+const unit = 30;
 
-var c = canvas.getContext("2d");
-c.fillStyle = "pink";
-c.fillRect(140,50,30,30);
-c.strokeStyle = "black";
-c.strokeRect(140,50,30,30);
+for(let row=0;row<20;row++){
+    for(let col=0;col<20;col++)
+        {
+        c.fillRect(col*unit,row*unit,unit,unit);
+        // c.fillRect(col*unit,row*unit,unit,unit);
+        c.strokeRect(col*unit,row*unit,unit,unit);
+    }
+}
+
+
+
+
+
+
+
+
 
 console.log(canvas);
