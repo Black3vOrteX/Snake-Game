@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LOGIN </title>
-    <link rel="stylesheet" href="loginin.css">
-    
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
 </head>
-
 <body>
-    
-    <h1>SNAKE GAME</h1>
-    <h2>USER NAME</h2>
+    <p><h1>SNAKE GAME</h1></p> 
+    <!--- Heading for Name of the Game -->
+    <p><h3>Log in</h3></p>
+    <!--- Heading for the Login -->
+
+    <form action="login.php" method="post">
+        <label for="username">Your Name:</label>
+        <input type="text" id="username" name="username" required><br><br>
+       
+        <input type="submit" value="Start Game">
+        <br><br>
+        <!--- Login details -->
+
+        <a href="game.html"><!--Start Game--></a>
+        <!-- Link the Game to Login-->
+        
 </body>
+</html>
