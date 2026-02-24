@@ -14,20 +14,13 @@ c.strokeStyle = "black";
 
 const unit = 30;
 
-for(let row=0;row<20;row++){
-    for(let col=0;col<20;col++)
-        {
-       
-        // c.fillRect(col*unit,row*unit,unit,unit);
-        c.strokeRect(col*unit,row*unit,unit,unit);
-    }
-}
+
 
 let snakeCol = 10;
 let snakeRow = 10;
 
-c.fillStyle = "pink";
-c.fillRect(snakeCol*unit,snakeRow*unit,unit,unit);
+
+
 
 let dx = 0;
 let dy = 0;
