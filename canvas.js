@@ -61,7 +61,8 @@ function gameloop(){
 snakeCol += dx;
 snakeRow += dy;
 
- if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19){
+ if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19 || (snakeCol*unit === foodX && snakeRow*unit === foodY)
+ ){
     alert("Game Over");
     snakeCol = 10;
     snakeRow = 10;
@@ -77,6 +78,8 @@ drawfood();
 c.fillStyle = "pink";
 c.fillRect(snakeCol*unit,snakeRow*unit,unit,unit);
 }
+
+
 setInterval(gameloop,200);
 
 
