@@ -35,6 +35,19 @@ document.addEventListener("keydown",function(e){
         dy = 0;
     }
 });
+let foodX;
+let foodY;
+
+function placeFood() {
+  foodX = Math.floor(Math.random() * (canvas.width /unit)) * unit;
+  foodY = Math.floor(Math.random() * (canvas.height / unit)) * unit;
+}
+
+    function drawfood(){
+        c.fillStyle = "red";
+        c.fillRect(foodX,foodY,unit,unit);
+    }
+placeFood();
 
 function gameloop(){
     c.clearRect(0,0,canvas.width,canvas.height);
@@ -42,29 +55,29 @@ function gameloop(){
         for(let col = 0; col < 20; col++){
             c.strokeStyle = "black";
             c.strokeRect(col*unit,row*unit,unit,unit);
-            if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19){
+    }
+}
+
+snakeCol += dx;
+snakeRow += dy;
+
+ if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19){
     alert("Game Over");
     snakeCol = 10;
     snakeRow = 10;
     dx = 0;
-    dy = 0;
+    dy = 0;   
+    placeFood();
+    return;
+ }
     
-}
 
-        }
-    }
 
-snakeCol += dx;
-snakeRow += dy;
+drawfood(); 
 c.fillStyle = "pink";
 c.fillRect(snakeCol*unit,snakeRow*unit,unit,unit);
 }
 setInterval(gameloop,200);
-if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19){
-    alert("Game Over");
-    snakeCol = 10;
-    snakeRow = 10;
-    console.log("Game Over");
-}
+
 
 console.log(canvas);
