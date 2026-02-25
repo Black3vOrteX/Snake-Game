@@ -67,6 +67,11 @@ function gameloop() {
     if(newHead.col*unit === foodX  && newHead.row *unit=== foodY ) {
         score++;
         scoreIs.textContent = score;
+        if(score % 5 === 0 && speed > 60) {
+            speed -= 20;
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameloop, speed);
+        }
         placeFood();
     }  else {    
         snake.pop();
@@ -97,5 +102,5 @@ function gameloop() {
     c.fillRect(part.col * unit, part.row * unit, unit, unit);
 }
 }
-
-setInterval(gameloop, 200);
+let speed = 200;
+let gameInterval = setInterval(gameloop, speed);
