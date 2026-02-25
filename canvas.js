@@ -6,8 +6,8 @@ canvas.height=size;
 
 var c = canvas.getContext("2d");
 
-c.fillStyle = "pink";
-c.strokeStyle = "black";
+c.fillStyle = "green";
+
 
 const unit = 30;
 
@@ -90,8 +90,14 @@ c.fillStyle = "pink";
 c.fillRect(snakeCol*unit,snakeRow*unit,unit,unit);
 }
 
+var score = 0; 
+if(snakeCol === foodX/unit && snakeRow === foodY/unit){
+    score++;
+    console.log("Score: " + score);
+}
 
-setInterval(gameloop,200);
+
+setInterval(gameloop,150);
 
 
 console.log(canvas);
