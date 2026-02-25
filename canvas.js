@@ -60,6 +60,12 @@ function gameloop() {
     const newHead = { col: snake[0].col + dx,
          row: snake[0].row + dy };
     snake.unshift(newHead);
+    const maxlength = 15;
+    
+    if(snake.length > maxlength) {
+        snake.pop();
+    }
+    
     if(newHead.col*unit === foodX  && newHead.row *unit=== foodY ) {
         score++;
         scoreIs.textContent = score;
@@ -69,7 +75,7 @@ function gameloop() {
             gameInterval = setInterval(gameloop, speed);
         }
         if(score % 5 === 0) {
-            const colors = ["red", "blue", "green", "orange", "purple"];
+            const colors = ["red", "orange", "yellow", "pink", "cyan"];
             foodColor = colors[(score / 5) % colors.length];
         }
         placeFood();
@@ -97,10 +103,14 @@ function gameloop() {
     
     
     drawFood();
-    c.fillStyle = "yellowgreen";
+    for(let i= 0; i < snake.length; i++) {
+    c.fillStyle = `hsl(120, 70%, ${50 - i}%)`;
+       
     for(let part of snake) {
     c.fillRect(part.col * unit, part.row * unit, unit, unit);
 }
+}
+
 }
 let speed = 200;
 let gameInterval = setInterval(gameloop, speed);
