@@ -146,14 +146,14 @@ function updateTimer() {
 
     if (timeLeft <= 0) {
         timeLeft = 0;
-        timeDisplay.textContent = timeLeft;
+        timeDisplay.textContent = timeLeft.toString().padStart(2, "0");
 
         clearInterval(timerInterval);
         gameOver();
         return;
     }
 
-    timeDisplay.textContent = timeLeft;
+    timeDisplay.textContent = timeLeft.toString().padStart(2, "0");
 }
 
 
@@ -259,6 +259,37 @@ placeFood();
 
 gameInterval = setInterval(gameloop, speed);
 
+// perlin animation
+
+const bgCanvas = document.getElementById("bgCanvas");
+const bgCtx = bgCanvas.getContext("2d");
+
+bgCanvas.width = 600;
+bgCanvas.height = 600;
+
+let t = 0;
+
+function drawBackground() {
+
+    let edgeDistance = Math.min(x, y, 600 - x, 600 - y);
+
+if (edgeDistance < 35) {
+
+    let value = noise.perlin3(x * 0.006, y * 0.006, t);
+
+    let alpha = (value + 1) * 8;  // MUCH softer
+
+    imageData.data[index] = 94;
+    imageData.data[index + 1] = 234;
+    imageData.data[index + 2] = 212;
+    imageData.data[index + 3] = alpha;
+
+} else {
+    imageData.data[index + 3] = 0;
+}
+}
+
+drawBackground();
 
       
     
