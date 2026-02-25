@@ -1,5 +1,5 @@
 var canvas = document.getElementById("gameCanvas");
-
+let foodColor = "red";
 const size = 600;
 canvas.width = size;
 canvas.height = size;
@@ -19,12 +19,7 @@ let dy = 0;
 let foodX;
 let foodY;
 
-const foodImg = new Image();
-foodImg.src = "egg.png";
 
-foodImg.onload = function () {
-    placeFood();
-};
 
 document.addEventListener("keydown", function (e) {
 
@@ -49,7 +44,8 @@ function placeFood() {
 }
 
 function drawFood() {
-    c.drawImage(foodImg, foodX, foodY, unit, unit);
+    c.fillStyle = foodColor;
+    c.fillRect(foodX, foodY, unit, unit);   
 }
 
 function gameloop() {
@@ -71,6 +67,10 @@ function gameloop() {
             speed -= 20;
             clearInterval(gameInterval);
             gameInterval = setInterval(gameloop, speed);
+        }
+        if(score % 5 === 0) {
+            const colors = ["red", "blue", "green", "orange", "purple"];
+            foodColor = colors[(score / 5) % colors.length];
         }
         placeFood();
     }  else {    
