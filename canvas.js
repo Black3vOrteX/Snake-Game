@@ -51,7 +51,26 @@ function drawFood() {
     c.fillStyle = foodColor;
     c.fillRect(foodX, foodY, unit, unit);
 }
+function gameOver() {
 
+    alert("Game Over");
+
+    snake = [{ col: 10, row: 10 }];
+    dx = 0;
+    dy = 0;
+
+    score = 0;
+    scoreIs.textContent = score;
+
+    speed = 200;
+
+    clearInterval(gameInterval);
+    gameInterval = setInterval(gameloop, speed);
+
+    foodColor = "red";
+
+    placeFood();
+}
 function gameloop() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
@@ -103,28 +122,29 @@ function gameloop() {
     if (snake.length > MAX_LENGTH) {
         snake.pop();
     }
-
+//wall collision
+    
     if (
-        snake[0].col < 0 || snake[0].col > 19 ||
-        snake[0].row < 0 || snake[0].row > 19
+    snake[0].col < 0 || snake[0].col > 19 ||
+    snake[0].row < 0 || snake[0].row > 19
     ) {
 
-        alert("Game Over");
+    gameOver();
+    return;
+    }
 
-        snake = [{ col: 10, row: 10 }];
-        dx = 0;
-        dy = 0;
 
-        score = 0;
-        scoreIs.textContent = score;
+// Self collision
+    for (let i = 1; i < snake.length; i++) {
 
-        speed = 200;
+    if (
+        snake[0].col === snake[i].col &&
+        snake[0].row === snake[i].row
+    ) {
 
-        clearInterval(gameInterval);
-        gameInterval = setInterval(gameloop, speed);
-
-        placeFood();
+        gameOver();
         return;
+    }
     }
 
    drawFood();
