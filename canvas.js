@@ -56,13 +56,23 @@ function gameloop() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     for (let row = 0; row < 20; row++) {
         for (let col = 0; col < 20; col++) {
-            c.strokeRect(snake[0].col * unit, snake[0].row * unit, unit, unit);
+            c.strokeRect(col * unit, row * unit, unit, unit);
         }
     }
+
+
     const newHead = { col: snake[0].col + dx,
          row: snake[0].row + dy };
     snake.unshift(newHead);
-    snake.pop();
+    if(newHead.col*unit === foodX  && newHead.row *unit=== foodY ) {
+        score++;
+        scoreIs.textContent = score;
+        placeFood();
+    }  else {    
+        snake.pop();
+    }
+    
+    
     if (
         snake[0].col < 0 || snake[0].col > 19 ||snake[0].row < 0 || snake[0].row > 19
     ) {
@@ -80,17 +90,12 @@ function gameloop() {
     }
 
     
-    if (
-        snake[0].col * unit === foodX &&snake[0].row * unit === foodY) {
-        score++;
-        scoreIs.textContent = score;
-
-        placeFood();
-    }
+    
     drawFood();
     c.fillStyle = "yellowgreen";
-    c.fillRect(
-        snake[0].col * unit,snake[0].row * unit,unit,unit);
+    for(let part of snake) {
+    c.fillRect(part.col * unit, part.row * unit, unit, unit);
+}
 }
 
 setInterval(gameloop, 200);
