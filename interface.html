@@ -6,45 +6,60 @@
     <title>Snake Game</title>
 </head>
 <body>
-    <img
-    src="snake.png" alt="Snake Game Image" width="300" height="200"
-    alt="Snake 1"
-    />
+    
     
     <br><br>
+        <!--
+    
+        -->
 
-    <img
-     src="https://curiousworld-static-files.s3.amazonaws.com/blog/Snake%20Final%20Blog.jpg"
-    width="300" height="200" 
-    alt="Snake 2"/>
+
     <!--- Image for the Game -->
     <!--- Alt kept if internet not working it will display the name(snake) -->
     <!-- Suggested to do dimension change in CSS-->
      <!-- Try doing either height or width -->
 <header>
-    <p><h1>SNAKE GAME</h1></p> 
+    <p><h1> SNAKE GAME </h1></p> 
     <!--- Heading for Name of the Game -->
+    <img
+    src="snake.png" alt="Snake Game Image" width="150" 
+    alt="Snake 1"
+    align="right"/>
+
+    <img
+     src="https://curiousworld-static-files.s3.amazonaws.com/blog/Snake%20Final%20Blog.jpg"
+    width="150" 
+    alt="Snake 2"
+    align="left"/>
+
+
+
+     <!--- Image for the Game -->
+     <!--- Alt kept if internet not working it will display the name(snake) -->
+    
 </header>
 
-   <hr width="75%" size="2" color="green">
+   <hr width="50%" size="2" color="green">
    <!-- hr used to draw a line to seperate-->
 
     <p><h3><big>Log in</big></h3></p>
     <!--- Heading for the Login -->
 
     <form action="/index.html"
-    method="get">
-    <!--- get used instead of post for simplicity and for no confusion -->
-        <label for="username">Your Name:</label>
-        <input type="text" id="username" name="username" required><br><br>
+       method="get">
+        <!--- get used instead of post for simplicity and for no confusion -->
+        <label for="username">Name:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your Name" required><br><br>
        
         <input type="submit" value="Start Game">
-        </form>
+    </form>
         <!--- Login details -->
         
         <br><br> 
         
-     <link rel="stylesheet" href="loginin.css">  
+     <link rel="stylesheet" href="loginin.css"> 
+        
+
 
     </body>
 </html>
