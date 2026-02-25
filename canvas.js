@@ -60,7 +60,7 @@ document.addEventListener("keydown", function (e) {
         moved = true;
     }
 
-    // Start timer ONLY if snake actually moves
+    // Start timer only if sneke actually moves
     if (moved && !gameStarted) {
         gameStarted = true;
         timerInterval = setInterval(updateTimer, 1000);
@@ -81,20 +81,20 @@ function drawFood() {
     let x = foodX;
     let y = foodY;
 
-    // --- PULSE EFFECT ---
+    //pulse effect
     let pulse = Math.sin(Date.now() * 0.01) * 5 + 20;
 
-    // --- OUTER GLOW ---
+    // outer glow
     c.shadowColor = foodColor;
     c.shadowBlur = pulse;
 
     c.fillStyle = foodColor;
     c.fillRect(x, y, unit, unit);
 
-    // --- TURN OFF GLOW FOR CORE ---
+    // no glow for inner core
     c.shadowBlur = 0;
 
-    // --- INNER CORE (bright energy center) ---
+    // inner core
     c.fillStyle = "white";
     c.fillRect(x + 8, y + 8, unit - 16, unit - 16);
 
@@ -135,7 +135,7 @@ function gameOver() {
     timeLeft = 60;
     timeDisplay.textContent = timeLeft;
 
-    timerInterval = setInterval(updateTimer, 1000);
+    
 }
 
 
@@ -144,11 +144,16 @@ function updateTimer() {
 
     timeLeft--;
 
-    timeDisplay.textContent = timeLeft;
-
     if (timeLeft <= 0) {
+        timeLeft = 0;
+        timeDisplay.textContent = timeLeft;
+
+        clearInterval(timerInterval);
         gameOver();
+        return;
     }
+
+    timeDisplay.textContent = timeLeft;
 }
 
 
