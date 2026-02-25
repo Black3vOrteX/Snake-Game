@@ -3,37 +3,41 @@ body {
     background-color: black;
     margin : 0;
     padding : 0;
-    
-    
 }
 
-h1 {
-    color: yellowgreen;
-    text-align: center;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 900;
-    line-height: 1.4em;
-
-    margin: 40px 0;
-}
-
-.box{
+#header{
     display: flex;
-    justify-content: space-between;
-    padding: 0;
-    align-items: center;
-    border-bottom: 1px solid yellowgreen;
-    box-sizing: border-box;
     
-   
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid yellowgreen;
 }
 
 
+.score{
+    color: yellowgreen;
+    text-align: left;
+    font-size: 1.2em;
+    flex: 1;
+}
 
-.time{
+.title {
+    color: yellowgreen;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.0em;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+
+
+.time {
     color: yellowgreen;
     text-align: right;
     font-size: 1.2em;
+    flex: 1;
 }
 
 .label{
@@ -42,37 +46,15 @@ h1 {
     font-size: 1.2em;
     margin-right: 10px;
     
-    float: left;
+  
 }
 
 .value{
     color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2em;
-    float: left;
+   
 }
-
-.score{
-    color: yellowgreen;
-    text-align: right;
-    font-size: 1.2em;
-}   
-
-.label1{
-    color: yellowgreen;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.2em;
-    margin-right: 10px;
-    text-align: left;
-}
-
-.value1{
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.2em;
-    text-align: left;
-}
-
 
 canvas{
     display: block;
