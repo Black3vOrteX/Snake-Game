@@ -37,26 +37,35 @@ const MAX_LENGTH = 15;
 
 document.addEventListener("keydown", function (e) {
 
-    if (!gameStarted) {
+    let moved = false;
 
+    if (e.key === "ArrowUp" && dy !== 1) {
+        dx = 0;
+        dy = -1;
+        moved = true;
+    }
+    else if (e.key === "ArrowDown" && dy !== -1) {
+        dx = 0;
+        dy = 1;
+        moved = true;
+    }
+    else if (e.key === "ArrowLeft" && dx !== 1) {
+        dx = -1;
+        dy = 0;
+        moved = true;
+    }
+    else if (e.key === "ArrowRight" && dx !== -1) {
+        dx = 1;
+        dy = 0;
+        moved = true;
+    }
+
+    // Start timer ONLY if snake actually moves
+    if (moved && !gameStarted) {
         gameStarted = true;
         timerInterval = setInterval(updateTimer, 1000);
     }
-
-    if (e.key === "ArrowUp" && dy !== 1) {
-        dx = 0; dy = -1;
-    }
-    else if (e.key === "ArrowDown" && dy !== -1) {
-        dx = 0; dy = 1;
-    }
-    else if (e.key === "ArrowLeft" && dx !== 1) {
-        dx = -1; dy = 0;
-    }
-    else if (e.key === "ArrowRight" && dx !== -1) {
-        dx = 1; dy = 0;
-    }
 });
-
 
 // Place food
 function placeFood() {
@@ -67,9 +76,32 @@ function placeFood() {
 
 // Draw food
 function drawFood() {
+   
+
+    let x = foodX;
+    let y = foodY;
+
+    // --- PULSE EFFECT ---
+    let pulse = Math.sin(Date.now() * 0.01) * 5 + 20;
+
+    // --- OUTER GLOW ---
+    c.shadowColor = foodColor;
+    c.shadowBlur = pulse;
+
     c.fillStyle = foodColor;
-    c.fillRect(foodX, foodY, unit, unit);
+    c.fillRect(x, y, unit, unit);
+
+    // --- TURN OFF GLOW FOR CORE ---
+    c.shadowBlur = 0;
+
+    // --- INNER CORE (bright energy center) ---
+    c.fillStyle = "white";
+    c.fillRect(x + 8, y + 8, unit - 16, unit - 16);
+
+    c.fillStyle = foodColor;
+    c.fillRect(x + 13, y + 13, unit - 26, unit - 26);
 }
+
 
 
 // Game Over
@@ -127,11 +159,12 @@ function gameloop() {
     c.clearRect(0, 0, canvas.width, canvas.height);
 
     // Grid
-    for (let row = 0; row < 20; row++) {
-        for (let col = 0; col < 20; col++) {
-            c.strokeRect(col * unit, row * unit, unit, unit);
-        }
-    }
+    //for (let row = 0; row < 20; row++) {
+    //    for (let col = 0; col < 20; col++) {
+    //        c.strokeRect(col * unit, row * unit, unit, unit);
+    //}
+    //}
+    
 
     // New head
     const newHead = {
@@ -201,17 +234,20 @@ function gameloop() {
 
     drawFood();
 
-    for (let i = 0; i < snake.length; i++) {
+c.fillStyle = "#00ff88";
+c.shadowColor = "#00ff88";
+c.shadowBlur = 15;
 
-        c.fillStyle = `hsl(120, 70%, ${50 - i}%)`;
+for (let i = 0; i < snake.length; i++) {
+    c.fillRect(
+        snake[i].col * unit,
+        snake[i].row * unit,
+        unit,
+        unit
+    );
+}
 
-        c.fillRect(
-            snake[i].col * unit,
-            snake[i].row * unit,
-            unit,
-            unit
-        );
-    }
+c.shadowBlur = 0;
 }
 
 placeFood();
