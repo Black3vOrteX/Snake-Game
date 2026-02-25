@@ -55,14 +55,15 @@ function gameloop(){
         for(let col = 0; col < 20; col++){
             c.strokeStyle = "black";
             c.strokeRect(col*unit,row*unit,unit,unit);
+            
     }
 }
 
 snakeCol += dx;
 snakeRow += dy;
 
- if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19 || (snakeCol*unit === foodX && snakeRow*unit === foodY)
- ){
+ if(snakeCol < 0 || snakeCol > 19 || snakeRow < 0 || snakeRow > 19 )
+ {
     alert("Game Over");
     snakeCol = 10;
     snakeRow = 10;
@@ -70,6 +71,9 @@ snakeRow += dy;
     dy = 0;   
     placeFood();
     return;
+ }
+ else if(snakeCol === foodX/unit && snakeRow === foodY/unit){
+    placeFood();
  }
     
 
