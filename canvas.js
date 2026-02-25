@@ -43,10 +43,17 @@ function placeFood() {
   foodY = Math.floor(Math.random() * (canvas.height / unit)) * unit;
 }
 
+
+ const foodImg = new Image();
+    foodImg.src = "egg.png";
+    c.drawImage(foodImg, foodX, foodY, unit, unit);
+   
     function drawfood(){
-        c.fillStyle = "red";
-        c.fillRect(foodX,foodY,unit,unit);
+    c.drawImage(foodImg, foodX, foodY, unit, unit);
+
     }
+
+
 placeFood();
 
 function gameloop(){
