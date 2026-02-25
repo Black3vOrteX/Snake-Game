@@ -79,7 +79,7 @@ snakeRow += dy;
 
 
 drawfood(); 
-c.fillStyle = "pink";
+c.fillStyle = "yellowgreen";
 c.fillRect(snakeCol*unit,snakeRow*unit,unit,unit);
 }
 
@@ -90,7 +90,7 @@ if(snakeCol === foodX/unit && snakeRow === foodY/unit){
 }
 
 
-setInterval(gameloop,150);
+setInterval(gameloop,200);
 
 
 console.log(canvas);

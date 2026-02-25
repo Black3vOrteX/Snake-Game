@@ -28,14 +28,11 @@ h1 {
    
 }
 
-.center{
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.2em;
-}
+
+
 .time{
     color: yellowgreen;
-    text-align: left;
+    text-align: right;
     font-size: 1.2em;
 }
 
@@ -44,12 +41,15 @@ h1 {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2em;
     margin-right: 10px;
+    
+    float: left;
 }
 
 .value{
     color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2em;
+    float: left;
 }
 
 .score{
@@ -63,12 +63,14 @@ h1 {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2em;
     margin-right: 10px;
+    text-align: left;
 }
 
 .value1{
     color: white;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2em;
+    text-align: left;
 }
 
 
