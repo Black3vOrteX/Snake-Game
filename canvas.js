@@ -223,6 +223,14 @@ function gameloop() {
         };
 
         snake.unshift(newHead);
+        // Wall collision
+    if (
+        snake[0].col < 0 || snake[0].col > 19 ||
+        snake[0].row < 0 || snake[0].row > 19
+    ) {
+        gameOver();
+        return;
+    }
 
         if (
             foodActive &&
