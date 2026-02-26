@@ -72,6 +72,55 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
+let touchStartX = 0;
+let touchStartY = 0;
+
+canvas.addEventListener("touchstart", function (e) {
+
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+});
+
+canvas.addEventListener("touchend", function (e) {
+
+    const touch = e.changedTouches[0];
+
+    const dxTouch = touch.clientX - touchStartX;
+    const dyTouch = touch.clientY - touchStartY;
+    const minSwipeDistance = 30;
+
+
+    if (Math.abs(dxTouch) > Math.abs(dyTouch)) {
+        if (Math.abs(dxTouch) < minSwipeDistance) return;
+        // Horizontal swip
+        if (dxTouch > 0 && dx !== -1) {
+            dx = 1;
+            dy = 0;
+        } else if (dxTouch < 0 && dx !== 1) {
+            dx = -1;
+            dy = 0;
+        }
+
+    } else {
+        if (Math.abs(dyTouch) < minSwipeDistance) return;
+        // Vertical swipe
+        if (dyTouch > 0 && dy !== -1) {
+            dx = 0;
+            dy = 1;
+        } else if (dyTouch < 0 && dy !== 1) {
+            dx = 0;
+            dy = -1;
+        }
+    }
+
+    //  timer on first swipe
+    if (!gameStarted) {
+        gameStarted = true;
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+});
+
 // Place food
 function placeFood() {
     foodX = Math.floor(Math.random() * 20) * unit;

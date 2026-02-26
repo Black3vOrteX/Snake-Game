@@ -3,6 +3,7 @@ body {
     
     margin: 0;
     padding: 0;
+    overflow: hidden;
     background: radial-gradient(circle at center,
         #111827 0%,
         #0b1120 60%,
@@ -86,7 +87,7 @@ canvas {
     height: 600px;
 
     border-radius: 22px;
-
+    touch-action: none;
     
     box-shadow:
         0 0 6px rgba(94, 234, 212, 0.15),
