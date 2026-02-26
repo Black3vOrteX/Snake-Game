@@ -1,5 +1,10 @@
 var canvas = document.getElementById("gameCanvas");
 
+let foodLife = 5;          // seconds before decay
+let foodLifeLeft = 5;      
+let foodDecayInterval;
+
+
 let timeLeft = 60;
 const timeDisplay = document.querySelector(".time .value");
 
@@ -71,6 +76,7 @@ document.addEventListener("keydown", function (e) {
 function placeFood() {
     foodX = Math.floor(Math.random() * 20) * unit;
     foodY = Math.floor(Math.random() * 20) * unit;
+    resetFoodLife();
 }
 
 
@@ -135,7 +141,7 @@ function gameOver() {
     timeLeft = 60;
     timeDisplay.textContent = timeLeft;
 
-    
+    clearInterval(foodDecayInterval);
 }
 
 
@@ -258,6 +264,29 @@ c.shadowBlur = 0;
 placeFood();
 
 gameInterval = setInterval(gameloop, speed);
+
+function updateFoodLife() {
+
+    foodLifeLeft--;
+
+    if (foodLifeLeft <= 0) {
+
+        // Food expired
+        placeFood();
+        resetFoodLife();
+    }
+}
+
+function resetFoodLife() {
+
+    clearInterval(foodDecayInterval);
+
+    foodLifeLeft = foodLife;
+
+    foodDecayInterval = setInterval(updateFoodLife, 1000);
+}
+
+
 
 // perlin animation
 
