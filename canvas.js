@@ -1,4 +1,7 @@
 var canvas = document.getElementById("gameCanvas");
+const gameOverScreen = document.getElementById("gameOverScreen");
+const finalScoreText = document.getElementById("finalScore");
+const restartBtn = document.getElementById("restartBtn");
 
 let foodLife = 5;          // seconds before decay
 let foodLifeLeft = 5;      
@@ -75,12 +78,6 @@ document.addEventListener("keydown", function (e) {
 let touchStartX = 0;
 let touchStartY = 0;
 
-canvas.addEventListener("touchstart", function (e) {
-
-    const touch = e.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-});
 
 canvas.addEventListener("touchend", function (e) {
 
@@ -119,6 +116,7 @@ canvas.addEventListener("touchend", function (e) {
         gameStarted = true;
         timerInterval = setInterval(updateTimer, 1000);
     }
+
 });
 
 // Place food
@@ -162,37 +160,20 @@ function drawFood() {
 // Game Over
 function gameOver() {
 
-    alert("Game Over");
+    // Stop everything
+    clearInterval(gameInterval);
+    clearInterval(timerInterval);
+    clearInterval(foodDecayInterval);
 
-    // Reset snake
-    snake = [{ col: 10, row: 10 }];
-    dx = 0;
-    dy = 0;
-
-    // Reset score
-    score = 0;
-    scoreIs.textContent = score;
-
-    // Reset speed
-    speed = 200;
+    // Show overlay with final score
+    finalScoreText.textContent = "Score: " + score;
+    gameOverScreen.classList.remove("hidden");
 
     gameStarted = false;
-    clearInterval(gameInterval);
-    gameInterval = setInterval(gameloop, speed);
-
-    // Reset food
-    foodColor = "red";
-    placeFood();
-
-    // Reset timer
-    clearInterval(timerInterval);
-
-    timeLeft = 60;
-    timeDisplay.textContent = timeLeft;
-
-    clearInterval(foodDecayInterval);
 }
 
+ 
+    
 
 // Timer
 function updateTimer() {
@@ -339,35 +320,71 @@ function resetFoodLife() {
 
 // perlin animation
 
-const bgCanvas = document.getElementById("bgCanvas");
-const bgCtx = bgCanvas.getContext("2d");
+//const bgCanvas = document.getElementById("bgCanvas");
+//const bgCtx = bgCanvas.getContext("2d");
 
-bgCanvas.width = 600;
-bgCanvas.height = 600;
+//bgCanvas.width = 600;
+//bgCanvas.height = 600;
 
-let t = 0;
+//let t = 0;
 
-function drawBackground() {
+//function drawBackground() {
 
-    let edgeDistance = Math.min(x, y, 600 - x, 600 - y);
+//    let edgeDistance = Math.min(x, y, 600 - x, 600 - y);
 
-if (edgeDistance < 35) {
+//if (edgeDistance < 35) {
 
-    let value = noise.perlin3(x * 0.006, y * 0.006, t);
+//   let value = noise.perlin3(x * 0.006, y * 0.006, t);
 
-    let alpha = (value + 1) * 8;  // MUCH softer
+ //   let alpha = (value + 1) * 8;  // MUCH softer
 
-    imageData.data[index] = 94;
-    imageData.data[index + 1] = 234;
-    imageData.data[index + 2] = 212;
-    imageData.data[index + 3] = alpha;
+ //   imageData.data[index] = 94;
+ //   imageData.data[index + 1] = 234;
+ //   imageData.data[index + 2] = 212;
+  //  imageData.data[index + 3] = alpha;
 
-} else {
-    imageData.data[index + 3] = 0;
-}
-}
+//} else {
+ //   imageData.data[index + 3] = 0;
+//}
+//}
 
-drawBackground();
+//drawBackground();
 
-      
+  restartBtn.addEventListener("click", function () {
+
+    // Hide overlay
+    gameOverScreen.classList.add("hidden");
     
+
+    // Stop any leftover intervals (safety)
+    clearInterval(gameInterval);
+    clearInterval(timerInterval);
+    clearInterval(foodDecayInterval);
+
+    // Reset snake
+    snake = [{ col: 10, row: 10 }];
+    dx = 0;
+    dy = 0;
+
+    // Reset score
+    score = 0;
+    scoreIs.textContent = score;
+
+    // Reset speed
+    speed = 200;
+
+    // Reset timer
+    timeLeft = 60;
+    timeDisplay.textContent = timeLeft.toString().padStart(2, "0");
+
+    gameStarted = false;
+
+    // Reset food
+    foodColor = "red";
+    placeFood();
+
+    // Restart main loop
+    gameInterval = setInterval(gameloop, speed);
+
+    console.log("Restart clicked");
+});
