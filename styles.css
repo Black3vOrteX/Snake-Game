@@ -122,3 +122,91 @@ canvas {
     
 
  
+/* function gameloop() {
+
+    c.clearRect(0, 0, canvas.width, canvas.height);
+
+    // ===== FOOD DECAY CHECK =====
+    if (foodActive && Date.now() - foodSpawnTime >= foodLife) {
+
+        foodActive = false;
+
+        setTimeout(() => {
+            placeFood();
+        }, 500);
+    }
+
+    const newHead = {
+        col: snake[0].col + dx,
+        row: snake[0].row + dy
+    };
+
+    snake.unshift(newHead);
+
+    if (
+        foodActive &&
+        newHead.col * unit === foodX &&
+        newHead.row * unit === foodY
+    ) {
+
+        score++;
+        scoreIs.textContent = score;
+
+        if (score % 5 === 0 && speed > 60) {
+            speed -= 20;
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameloop, speed);
+        }
+
+        if (score % 5 === 0) {
+            const colors = ["red", "orange", "yellow", "pink", "cyan"];
+            foodColor = colors[(score / 5) % colors.length];
+        }
+
+        placeFood();
+
+    } else {
+        snake.pop();
+    }
+
+    if (snake.length > MAX_LENGTH) {
+        snake.pop();
+    }
+
+    if (
+        snake[0].col < 0 || snake[0].col >= gridSize ||
+        snake[0].row < 0 || snake[0].row >= gridSize
+    ) {
+        gameOver();
+        return;
+    }
+
+    for (let i = 1; i < snake.length; i++) {
+        if (
+            snake[0].col === snake[i].col &&
+            snake[0].row === snake[i].row
+        ) {
+            gameOver();
+            return;
+        }
+    }
+
+    drawFood();
+
+    c.fillStyle = "#00ff88";
+    c.shadowColor = "#00ff88";
+    c.shadowBlur = 15;
+
+    for (let i = 0; i < snake.length; i++) {
+        c.fillRect(
+            snake[i].col * unit,
+            snake[i].row * unit,
+            unit,
+            unit
+        );
+    }
+
+    c.shadowBlur = 0;
+}
+
+*/

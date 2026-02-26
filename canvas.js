@@ -200,78 +200,48 @@ function gameOver() {
 }
 
 // ================= GAME LOOP =================
-
 function gameloop() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    // ===== FOOD DECAY CHECK =====
+    // ===== FOOD DECAY (LOCKED) =====
     if (foodActive && Date.now() - foodSpawnTime >= foodLife) {
 
-        foodActive = false;
+        foodActive = false; // LOCK so it cannot trigger again
 
         setTimeout(() => {
             placeFood();
         }, 500);
     }
 
-    const newHead = {
-        col: snake[0].col + dx,
-        row: snake[0].row + dy
-    };
+    // ===== SNAKE MOVEMENT =====
+    if (dx !== 0 || dy !== 0) {
 
-    snake.unshift(newHead);
+        const newHead = {
+            col: snake[0].col + dx,
+            row: snake[0].row + dy
+        };
 
-    if (
-        foodActive &&
-        newHead.col * unit === foodX &&
-        newHead.row * unit === foodY
-    ) {
+        snake.unshift(newHead);
 
-        score++;
-        scoreIs.textContent = score;
-
-        if (score % 5 === 0 && speed > 60) {
-            speed -= 20;
-            clearInterval(gameInterval);
-            gameInterval = setInterval(gameloop, speed);
-        }
-
-        if (score % 5 === 0) {
-            const colors = ["red", "orange", "yellow", "pink", "cyan"];
-            foodColor = colors[(score / 5) % colors.length];
-        }
-
-        placeFood();
-
-    } else {
-        snake.pop();
-    }
-
-    if (snake.length > MAX_LENGTH) {
-        snake.pop();
-    }
-
-    if (
-        snake[0].col < 0 || snake[0].col >= gridSize ||
-        snake[0].row < 0 || snake[0].row >= gridSize
-    ) {
-        gameOver();
-        return;
-    }
-
-    for (let i = 1; i < snake.length; i++) {
         if (
-            snake[0].col === snake[i].col &&
-            snake[0].row === snake[i].row
+            foodActive &&
+            newHead.col * unit === foodX &&
+            newHead.row * unit === foodY
         ) {
-            gameOver();
-            return;
+
+            score++;
+            scoreIs.textContent = score;
+            placeFood();
+
+        } else {
+            snake.pop();
         }
     }
 
     drawFood();
 
+    // draw snake
     c.fillStyle = "#00ff88";
     c.shadowColor = "#00ff88";
     c.shadowBlur = 15;
@@ -287,7 +257,6 @@ function gameloop() {
 
     c.shadowBlur = 0;
 }
-
 // ================= START =================
 
 placeFood();
