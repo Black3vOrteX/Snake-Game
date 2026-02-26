@@ -206,12 +206,12 @@ function gameloop() {
 
     // ===== FOOD DECAY (LOCKED) =====
     if (foodActive && Date.now() - foodSpawnTime >= foodLife) {
-
-        foodActive = false; // LOCK so it cannot trigger again
+        
+        //foodActive = false; // LOCK so it cannot trigger again
 
         setTimeout(() => {
             placeFood();
-        }, 500);
+        }, 100);
     }
 
     // ===== SNAKE MOVEMENT =====
