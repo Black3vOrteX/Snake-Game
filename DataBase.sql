@@ -1,0 +1,8 @@
+CREATE DATABASE LeaderBoardDB;
+
+CREATE TABLE Players(
+    UserName VARCHAR(255) PRIMARY KEY,
+    Score INT NOT NULL;
+    Rank INT NOT NULL;
+
+);
