@@ -1,6 +1,8 @@
 // ================= SETUP =================
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
+const overlay = document.getElementById("gameOverOverlay");
+const restartBtn = document.getElementById("restartBtn");
 
 const size = 600;
 canvas.width = size;
@@ -194,8 +196,14 @@ function drawSnake() {
 
 // ================= GAME OVER =================
 function gameOver() {
+    clearInterval(timerInterval);
+    gameStarted = false;
 
-    alert("Game Over");
+    overlay.classList.remove("hidden");
+    overlay.classList.add("show");
+}
+
+function restartGame() {
 
     score = 0;
     targetLength = 5;
@@ -208,15 +216,17 @@ function gameOver() {
     timeLeft = 60;
     timeDisplay.textContent = "60";
 
-    clearInterval(timerInterval);
-    gameStarted = false;
-
     velocity = { x: 1, y: 0 };
 
     resetSnake();
     placeFood();
-}
 
-// ================= START =================
+    overlay.classList.remove("show");
+    overlay.classList.add("hidden");
+
+    clearInterval(timerInterval);
+    gameStarted = false;
+}
 placeFood();
+restartBtn.addEventListener("click", restartGame);
 setInterval(gameLoop, 16);
