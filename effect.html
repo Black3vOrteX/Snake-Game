@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .leaderboard {
+            width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .leaderboard ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .leaderboard li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .input-group {
+            display: flex;
+            margin-bottom: 10px;
+            justify-content: space-between;
+        }
+
+        .input-group input {
+            width: 45%;
+            padding: 5px;
+        }
+
+        .input-group button {
+            padding: 5px;
+            width: 45%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .input-group button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="leaderboard">
+        <h2>Leaderboard</h2>
+        
+        <!-- Form to add scores -->
+        <div class="input-group">
+            <input type="text" id="playerName" placeholder="Enter name">
+            <input type="number" id="playerScore" placeholder="Enter score">
+        </div>
+        <div class="input-group">
+            <button onclick="addScore()">Add Score</button>
+        </div>
+        
+        <ul id="scoreList">
+            <!-- Leaderboard list will go here -->
+        </ul>
+    </div>
+
+    <script>
+        // Load existing leaderboard data from localStorage when the page loads
+        window.onload = loadLeaderboard;
+
+        // Function to add score to leaderboard
+        function addScore() {
+            const playerName = document.getElementById('playerName').value;
+            const playerScore = document.getElementById('playerScore').value;
+
+            if (playerName === '' || playerScore === '') {
+                alert('Please enter both name and score!');
+                return;
+            }
+
+            const leaderboardData = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+            leaderboardData.push({
+                name: playerName,
+                score: parseInt(playerScore)
+            });
+
+            // Sort leaderboard data by score in descending order
+            leaderboardData.sort((a, b) => b.score - a.score);
+
+            // Save the updated leaderboard data in localStorage
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboardData));
+
+            // Clear input fields
+            document.getElementById('playerName').value = '';
+            document.getElementById('playerScore').value = '';
+
+            // Reload the leaderboard
+            loadLeaderboard();
+        }
+
+        // Function to load leaderboard data
+        function loadLeaderboard() {
+            const leaderboardData = JSON.parse(localStorage.getItem('leaderboard')) || [];
+            const scoreList = document.getElementById('scoreList');
+            scoreList.innerHTML = '';
+
+            leaderboardData.forEach((entry, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${entry.name}: ${entry.score}`;
+                scoreList.appendChild(li);
+            });
+        }
+    </script>
+
+</body>
+</html>
