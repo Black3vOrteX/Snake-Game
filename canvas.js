@@ -1,21 +1,21 @@
-// ================= SETUP =================
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
 const overlay = document.getElementById("gameOverOverlay");
 const restartBtn = document.getElementById("restartBtn");
+const overlayTitle = document.getElementById("overlayTitle");
 
 const size = 600;
 canvas.width = size;
 canvas.height = size;
 
-// ================= GAME SETTINGS =================
+// ================= SETTINGS =================
 const MAX_LENGTH = 15;
 const SEGMENT_SPACING = 6;
 
 let score = 0;
 let timeLeft = 60;
 
-let velocity = { x: 1, y: 0 };
+let velocity = { x: 0, y: 0 };
 let baseSpeed = 2;
 let currentSpeed = baseSpeed;
 
@@ -29,12 +29,13 @@ let foodColors = ["#ff4d4d", "#facc15", "#22c55e", "#3b82f6", "#a855f7"];
 let currentFoodColor = foodColors[0];
 
 let gameStarted = false;
+let gameActive = true;
 let timerInterval;
 
 const scoreIs = document.querySelector(".score .value");
 const timeDisplay = document.querySelector(".time .value");
 
-// ================= INITIALIZE =================
+// ================= INIT =================
 function resetSnake() {
     snake = [];
     for (let i = 0; i < targetLength * 10; i++) {
@@ -47,12 +48,22 @@ resetSnake();
 // ================= INPUT =================
 document.addEventListener("keydown", (e) => {
 
-    if (e.key === "ArrowUp" && velocity.y === 0) velocity = { x: 0, y: -1 };
-    if (e.key === "ArrowDown" && velocity.y === 0) velocity = { x: 0, y: 1 };
-    if (e.key === "ArrowLeft" && velocity.x === 0) velocity = { x: -1, y: 0 };
-    if (e.key === "ArrowRight" && velocity.x === 0) velocity = { x: 1, y: 0 };
+    if (!gameActive) return;
 
-    if (!gameStarted) {
+    if (e.key === "ArrowUp" && velocity.y === 0) {
+        velocity = { x: 0, y: -1 };
+    }
+    else if (e.key === "ArrowDown" && velocity.y === 0) {
+        velocity = { x: 0, y: 1 };
+    }
+    else if (e.key === "ArrowLeft" && velocity.x === 0) {
+        velocity = { x: -1, y: 0 };
+    }
+    else if (e.key === "ArrowRight" && velocity.x === 0) {
+        velocity = { x: 1, y: 0 };
+    }
+
+    if (!gameStarted && (velocity.x !== 0 || velocity.y !== 0)) {
         gameStarted = true;
         timerInterval = setInterval(updateTimer, 1000);
     }
@@ -61,20 +72,17 @@ document.addEventListener("keydown", (e) => {
 // ================= TIMER =================
 function updateTimer() {
 
-    if (timeLeft <= 0) return;
+    if (!gameActive) return;
 
     timeLeft--;
 
     timeDisplay.textContent =
         timeLeft.toString().padStart(2, "0");
 
-    if (timeLeft === 0) {
+    if (timeLeft <= 0) {
+        timeLeft = 0;
         clearInterval(timerInterval);
-
-        // Small delay so 00 is visible
-        setTimeout(() => {
-            gameOver();
-        }, 200);
+        gameOver("time");
     }
 }
 
@@ -98,7 +106,6 @@ function drawFood() {
     c.fillStyle = currentFoodColor;
     c.fill();
 
-    // highlight
     c.beginPath();
     c.ellipse(-3, -4, 3, 5, 0, 0, Math.PI * 2);
     c.fillStyle = "rgba(255,255,255,0.6)";
@@ -109,7 +116,16 @@ function drawFood() {
 
 // ================= GAME LOOP =================
 function gameLoop() {
+
+    if (!gameActive) return;
+
     c.clearRect(0, 0, size, size);
+
+    if (velocity.x === 0 && velocity.y === 0) {
+        drawFood();
+        drawSnake();
+        return;
+    }
 
     let head = snake[0];
     let newHead = {
@@ -123,16 +139,27 @@ function gameLoop() {
         snake.pop();
     }
 
-    // Wall collision
+    // WALL COLLISION
     if (
         newHead.x < 0 || newHead.x > size ||
         newHead.y < 0 || newHead.y > size
     ) {
-        gameOver();
+        gameOver("collision");
         return;
     }
 
-    // Food collision
+    // SELF COLLISION (skip first 20 smooth points)
+    for (let i = 20; i < snake.length; i++) {
+        let dx = newHead.x - snake[i].x;
+        let dy = newHead.y - snake[i].y;
+
+        if (Math.sqrt(dx * dx + dy * dy) < 8) {
+            gameOver("collision");
+            return;
+        }
+    }
+
+    // FOOD COLLISION
     let dx = newHead.x - food.x;
     let dy = newHead.y - food.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
@@ -147,14 +174,10 @@ function gameLoop() {
         feedCount++;
         scoreIs.textContent = score;
 
-        // Every 5 feeds
         if (feedCount % 5 === 0) {
-
             currentSpeed += 0.4;
-
             let colorIndex =
                 Math.floor(feedCount / 5) % foodColors.length;
-
             currentFoodColor = foodColors[colorIndex];
         }
 
@@ -184,7 +207,6 @@ function drawSnake() {
     c.stroke();
     c.shadowBlur = 0;
 
-    // head glow
     c.beginPath();
     c.arc(snake[0].x, snake[0].y, 8, 0, Math.PI * 2);
     c.fillStyle = "#5eead4";
@@ -195,14 +217,22 @@ function drawSnake() {
 }
 
 // ================= GAME OVER =================
-function gameOver() {
+function gameOver(reason) {
+
+    if (!gameActive) return;
+
+    gameActive = false;
     clearInterval(timerInterval);
     gameStarted = false;
+
+    overlayTitle.textContent =
+        reason === "time" ? "Time Up" : "Game Over";
 
     overlay.classList.remove("hidden");
     overlay.classList.add("show");
 }
 
+// ================= RESTART =================
 function restartGame() {
 
     score = 0;
@@ -216,7 +246,7 @@ function restartGame() {
     timeLeft = 60;
     timeDisplay.textContent = "60";
 
-    velocity = { x: 1, y: 0 };
+    velocity = { x: 0, y: 0 };
 
     resetSnake();
     placeFood();
@@ -225,8 +255,12 @@ function restartGame() {
     overlay.classList.add("hidden");
 
     clearInterval(timerInterval);
+
     gameStarted = false;
+    gameActive = true;
 }
+
+// ================= START =================
 placeFood();
 restartBtn.addEventListener("click", restartGame);
 setInterval(gameLoop, 16);
