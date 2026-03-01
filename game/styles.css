@@ -183,45 +183,64 @@ canvas {
 }
 
 
-
 .controls {
+    position: relative;
     width: 100%;
     max-width: 600px;
-    margin: 15px auto 40px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.middle-row {
+    margin: -40px auto 40px auto; /* negative pulls it upward */
     display: flex;
     justify-content: center;
-    gap: 15px;
 }
 
-.controls button {
+.dpad {
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+.dpad-btn {
+    position: absolute;
     width: 55px;
     height: 55px;
-    font-size: 20px;
-    border-radius: 14px;
+    border-radius: 16px;
     border: none;
-    background: #111827;
+    background: rgba(17, 24, 39, 0.9);
     color: #5eead4;
+    font-size: 22px;
     box-shadow:
-        0 0 8px rgba(94, 234, 212, 0.4),
-        inset 0 0 6px rgba(94, 234, 212, 0.15);
+        0 0 10px rgba(94, 234, 212, 0.5),
+        inset 0 0 8px rgba(94, 234, 212, 0.2);
     cursor: pointer;
 }
 
-.controls button:active {
-    transform: scale(0.92);
+.dpad-btn:active {
+    transform: scale(0.9);
 }
 
-@media (max-height: 750px) {
-    .controls button {
-        width: 48px;
-        height: 48px;
-        font-size: 18px;
-    }
+/* Position buttons in cross shape */
+
+.up {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
+
+.down {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.left {
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.right {
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
