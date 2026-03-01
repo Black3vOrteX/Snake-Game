@@ -9,12 +9,11 @@ const overlayTitle = document.getElementById("overlayTitle");
 const scoreIs = document.querySelector(".score .value");
 const timeDisplay = document.querySelector(".time .value");
 
-const displaySize = Math.min(window.innerWidth - 20, 600);
+const wrapper = document.querySelector(".canvas-wrapper");
+const size = wrapper.offsetWidth;
 
-canvas.width = displaySize;
-canvas.height = displaySize;
-
-const size = displaySize;
+canvas.width = size;
+canvas.height = size;
 let foodSpawnTime = Date.now();
 const FOOD_LIFETIME = 5000;
 
