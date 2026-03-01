@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
 
@@ -9,20 +8,13 @@ const overlayTitle = document.getElementById("overlayTitle");
 const scoreIs = document.querySelector(".score .value");
 const timeDisplay = document.querySelector(".time .value");
 
-let foodSpawnTime = Date.now();
-const FOOD_LIFETIME = 5000;
-
-let highScore = Number(localStorage.getItem("snakeHighScore")) || 0;
-const wrapper = document.querySelector(".canvas-wrapper");
-
 const displaySize = Math.min(window.innerWidth - 20, 600);
-
-wrapper.style.maxWidth = displaySize + "px";
 
 canvas.width = displaySize;
 canvas.height = displaySize;
 
 const size = displaySize;
+
 canvas.width = size;
 canvas.height = size;
 
