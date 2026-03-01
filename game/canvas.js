@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
 
@@ -9,17 +8,26 @@ const overlayTitle = document.getElementById("overlayTitle");
 const scoreIs = document.querySelector(".score .value");
 const timeDisplay = document.querySelector(".time .value");
 
-const wrapper = document.querySelector(".canvas-wrapper");
-const size = wrapper.offsetWidth;
+// ================= RESPONSIVE SIZE =================
 
-canvas.width = size;
-canvas.height = size;
-let foodSpawnTime = Date.now();
-const FOOD_LIFETIME = 5000;
+let size;
 
-let highScore = Number(localStorage.getItem("snakeHighScore")) || 0;
-canvas.width = size;
-canvas.height = size;
+function resizeCanvas() {
+    const wrapper = document.querySelector(".canvas-wrapper");
+    size = wrapper.clientWidth;
+
+    canvas.width = size;
+    canvas.height = size;
+}
+
+resizeCanvas();
+window.addEventListener("resize", () => {
+    resizeCanvas();
+    resetSnake();
+    placeFood();
+});
+
+// ================= GAME SETTINGS =================
 
 const MAX_LENGTH = 15;
 const SEGMENT_SPACING = 6;
@@ -35,7 +43,7 @@ let snake = [];
 let targetLength = 5;
 let feedCount = 0;
 
-let food = { x: size/2, y: size/2 };
+let food = { x: 0, y: 0 };
 let foodColors = ["#ff4d4d", "#facc15", "#22c55e", "#3b82f6", "#a855f7"];
 let currentFoodColor = foodColors[0];
 
@@ -43,7 +51,13 @@ let gameStarted = false;
 let gameActive = true;
 let timerInterval;
 
+let foodSpawnTime = Date.now();
+const FOOD_LIFETIME = 5000;
+
+let highScore = Number(localStorage.getItem("snakeHighScore")) || 0;
+
 // ================= INIT =================
+
 function resetSnake() {
     snake = [];
 
@@ -57,8 +71,12 @@ function resetSnake() {
         });
     }
 }
+
 resetSnake();
-// ================= KEYBOARD CONTROLS =================
+
+// ================= INPUT =================
+
+// Keyboard
 document.addEventListener("keydown", (e) => {
     if (!gameActive) return;
 
@@ -71,13 +89,10 @@ document.addEventListener("keydown", (e) => {
     else if (e.key === "ArrowRight" && velocity.x === 0)
         velocity = { x: 1, y: 0 };
 
-    if (!gameStarted && (velocity.x !== 0 || velocity.y !== 0)) {
-        gameStarted = true;
-        timerInterval = setInterval(updateTimer, 1000);
-    }
+    startTimerIfNeeded();
 });
 
-// ================= TOUCH CONTROLS =================
+// Touch
 let touchStartX = 0;
 let touchStartY = 0;
 
@@ -108,13 +123,18 @@ canvas.addEventListener("touchend", (e) => {
             velocity = { x: 0, y: -1 };
     }
 
-    if (!gameStarted) {
+    startTimerIfNeeded();
+}, { passive: true });
+
+function startTimerIfNeeded() {
+    if (!gameStarted && (velocity.x !== 0 || velocity.y !== 0)) {
         gameStarted = true;
         timerInterval = setInterval(updateTimer, 1000);
     }
-}, { passive: true });
+}
 
 // ================= TIMER =================
+
 function updateTimer() {
     if (!gameActive) return;
 
@@ -122,13 +142,13 @@ function updateTimer() {
     timeDisplay.textContent = timeLeft.toString().padStart(2, "0");
 
     if (timeLeft <= 0) {
-        timeLeft = 0;
         clearInterval(timerInterval);
         gameOver("time");
     }
 }
 
 // ================= FOOD =================
+
 function placeFood() {
     food.x = Math.random() * (size - 40) + 20;
     food.y = Math.random() * (size - 40) + 20;
@@ -140,7 +160,6 @@ function drawFood() {
 
     c.save();
     c.translate(food.x, food.y);
-
     c.shadowColor = currentFoodColor;
     c.shadowBlur = pulse;
 
@@ -153,6 +172,7 @@ function drawFood() {
 }
 
 // ================= GAME LOOP =================
+
 function gameLoop() {
     if (!gameActive) return;
 
@@ -175,6 +195,7 @@ function gameLoop() {
     while (snake.length > targetLength * 10)
         snake.pop();
 
+    // Wall collision
     if (
         newHead.x < 0 || newHead.x > size ||
         newHead.y < 0 || newHead.y > size
@@ -183,6 +204,7 @@ function gameLoop() {
         return;
     }
 
+    // Self collision
     for (let i = 20; i < snake.length; i++) {
         let dx = newHead.x - snake[i].x;
         let dy = newHead.y - snake[i].y;
@@ -192,6 +214,7 @@ function gameLoop() {
         }
     }
 
+    // Food collision
     let dx = newHead.x - food.x;
     let dy = newHead.y - food.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
@@ -221,6 +244,7 @@ function gameLoop() {
 }
 
 // ================= DRAW SNAKE =================
+
 function drawSnake() {
     if (snake.length === 0) return;
 
@@ -244,6 +268,7 @@ function drawSnake() {
 }
 
 // ================= GAME OVER =================
+
 function gameOver(reason) {
     gameActive = false;
     clearInterval(timerInterval);
@@ -265,6 +290,7 @@ function gameOver(reason) {
 }
 
 // ================= RESTART =================
+
 function restartGame() {
     score = 0;
     targetLength = 5;
