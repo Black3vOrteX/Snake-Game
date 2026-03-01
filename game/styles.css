@@ -173,3 +173,34 @@ canvas {
   font-size: 18px;
   margin: 8px 0;
 }
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.middle-row {
+    display: flex;
+    gap: 20px;
+}
+
+.controls button {
+    width: 70px;
+    height: 70px;
+    font-size: 24px;
+    border-radius: 16px;
+    border: none;
+    background: #111827;
+    color: #5eead4;
+    box-shadow:
+        0 0 10px rgba(94, 234, 212, 0.4),
+        inset 0 0 10px rgba(94, 234, 212, 0.1);
+    cursor: pointer;
+}
+
+.controls button:active {
+    transform: scale(0.95);
+}

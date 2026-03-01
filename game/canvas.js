@@ -133,6 +133,30 @@ function startTimerIfNeeded() {
     }
 }
 
+const upBtn = document.getElementById("upBtn");
+const downBtn = document.getElementById("downBtn");
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+function changeDirection(newVel) {
+    if (!gameActive) return;
+
+    if (
+        (newVel.x !== 0 && velocity.x === 0) ||
+        (newVel.y !== 0 && velocity.y === 0)
+    ) {
+        velocity = newVel;
+        startTimerIfNeeded();
+    }
+}
+["touchstart", "click"].forEach(eventType => {
+    upBtn.addEventListener(eventType, () => changeDirection({ x: 0, y: -1 }));
+    downBtn.addEventListener(eventType, () => changeDirection({ x: 0, y: 1 }));
+    leftBtn.addEventListener(eventType, () => changeDirection({ x: -1, y: 0 }));
+    rightBtn.addEventListener(eventType, () => changeDirection({ x: 1, y: 0 }));
+});
+
+
 // ================= TIMER =================
 
 function updateTimer() {
