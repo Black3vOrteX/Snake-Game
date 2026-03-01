@@ -182,35 +182,46 @@ canvas {
   margin: 8px 0;
 }
 
+
+
 .controls {
     width: 100%;
     max-width: 600px;
-    margin: 30px auto 80px auto; 
+    margin: 15px auto 40px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .middle-row {
     display: flex;
-    gap: 20px;
+    justify-content: center;
+    gap: 15px;
 }
 
 .controls button {
-    width: 70px;
-    height: 70px;
-    font-size: 24px;
-    border-radius: 16px;
+    width: 55px;
+    height: 55px;
+    font-size: 20px;
+    border-radius: 14px;
     border: none;
     background: #111827;
     color: #5eead4;
     box-shadow:
-        0 0 10px rgba(94, 234, 212, 0.4),
-        inset 0 0 10px rgba(94, 234, 212, 0.1);
+        0 0 8px rgba(94, 234, 212, 0.4),
+        inset 0 0 6px rgba(94, 234, 212, 0.15);
     cursor: pointer;
 }
 
 .controls button:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
+}
+
+@media (max-height: 750px) {
+    .controls button {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
 }
