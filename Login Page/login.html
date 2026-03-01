@@ -11,14 +11,9 @@ body {
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
-
-  /* Background Image */
   background: url("backgam.jpeg") no-repeat center center/cover;
-  
-
 }
 
-/* Glass Login Box */
 .login-box {
   width: 350px;
   padding: 40px;
@@ -35,16 +30,6 @@ body {
   margin-bottom: 30px;
 }
 
-/* Close Button */
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* Input Fields */
 .input-box {
   margin-bottom: 20px;
 }
@@ -59,7 +44,6 @@ body {
   font-size: 16px;
 }
 
-/* Button */
 button {
   width: 100%;
   padding: 12px;
@@ -72,38 +56,26 @@ button {
   transition: 0.3s;
 }
 
+button:hover {
+  background: #16325c;
+}
 </style>
 </head>
 
 <body>
 
 <div class="login-box">
-  <div class="close-btn"></div>
   <h2>Login</h2>
 
-  <form action="index.html"
-  method="get">
-  <!--- get used instead of post for simplicity and for no confusion -->
-  <div class="input-box">
-    <input type="text" placeholder="Username" required>
-  </div>
+  <form action="../Game/index.html" method="get">
+    <div class="input-box">
+      <input type="text" placeholder="Username" required>
+    </div>
 
-<<<<<<< HEAD:login.html
- 
-  <button>StartGame</button>
-  <p><h1 style="width: 100px"
-    
-=======
+    <button type="submit">Start Game</button>
+  </form>
 
-  <button>game</button>
-  <p><h1 style="width: 100px"
->>>>>>> 28abea11407319d15b3d72707f86044adff0a0a3:Login Page/login.html
-  
-    
-    
-     
+</div>
 
- 
-
-    
-
+</body>
+</html>
