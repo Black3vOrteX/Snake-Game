@@ -177,21 +177,46 @@ function placeFood() {
 
 
 function drawFood() {
-    let pulse = Math.sin(Date.now() * 0.01) * 6 + 12;
+    let time = Date.now();
+
+    let pulse = Math.sin(time * 0.008) * 8 + 18;
+    let floatOffset = Math.sin(time * 0.004) * 4;
 
     c.save();
-    c.translate(food.x, food.y);
+    c.translate(food.x, food.y + floatOffset);
+
+    // ===== SOFT OUTER GLOW =====
+    c.beginPath();
+    c.ellipse(0, 0, 16, 20, 0, 0, Math.PI * 2);
+    c.fillStyle = currentFoodColor;
+    c.globalAlpha = 0.15;
     c.shadowColor = currentFoodColor;
     c.shadowBlur = pulse;
+    c.fill();
 
+    c.globalAlpha = 1;
+
+    // ===== MAIN EGG =====
     c.beginPath();
     c.ellipse(0, 0, 10, 14, 0, 0, Math.PI * 2);
-    c.fillStyle = currentFoodColor;
+
+    let gradient = c.createRadialGradient(0, -5, 2, 0, 0, 14);
+    gradient.addColorStop(0, "#ffffff");
+    gradient.addColorStop(0.4, currentFoodColor);
+    gradient.addColorStop(1, currentFoodColor);
+
+    c.fillStyle = gradient;
+    c.shadowBlur = 0;
+    c.fill();
+
+    // ===== GLOSS HIGHLIGHT =====
+    c.beginPath();
+    c.ellipse(-3, -5, 3, 5, 0, 0, Math.PI * 2);
+    c.fillStyle = "rgba(255,255,255,0.5)";
     c.fill();
 
     c.restore();
 }
-
 // ================= GAME LOOP =================
 
 function gameLoop() {
@@ -269,6 +294,23 @@ function gameLoop() {
 function drawSnake() {
     if (snake.length === 0) return;
 
+    // ===== BODY GLOW LAYER =====
+    c.beginPath();
+    c.moveTo(snake[0].x, snake[0].y);
+
+    for (let i = 1; i < snake.length - 2; i++) {
+        const xc = (snake[i].x + snake[i + 1].x) / 2;
+        const yc = (snake[i].y + snake[i + 1].y) / 2;
+        c.quadraticCurveTo(snake[i].x, snake[i].y, xc, yc);
+    }
+
+    c.lineWidth = 18;
+    c.strokeStyle = "rgba(94, 234, 212, 0.25)";
+    c.shadowColor = "#5eead4";
+    c.shadowBlur = 25;
+    c.stroke();
+
+    // ===== BODY CORE LAYER =====
     c.beginPath();
     c.moveTo(snake[0].x, snake[0].y);
 
@@ -279,13 +321,27 @@ function drawSnake() {
     }
 
     c.lineWidth = 14;
-    c.strokeStyle = "#00cc88";
+    let gradient = c.createLinearGradient(
+    snake[0].x, snake[0].y,
+    snake[snake.length - 1].x,
+    snake[snake.length - 1].y
+);
+    gradient.addColorStop(0, "#5eead4");
+    gradient.addColorStop(1, "#00cc88");
+c.strokeStyle = gradient;
+    c.shadowBlur = 0;
     c.stroke();
 
+    // ===== HEAD GLOW =====
     c.beginPath();
-    c.arc(snake[0].x, snake[0].y, 8, 0, Math.PI * 2);
+    c.arc(snake[0].x, snake[0].y, 9, 0, Math.PI * 2);
     c.fillStyle = "#5eead4";
+    c.shadowColor = "#5eead4";
+    c.shadowBlur = 30;
     c.fill();
+
+    // reset shadow
+    c.shadowBlur = 0;
 }
 
 // ================= GAME OVER =================
@@ -337,7 +393,12 @@ function restartGame() {
 
 placeFood();
 restartBtn.addEventListener("click", restartGame);
-setInterval(gameLoop, 16);
+function animate() {
+    gameLoop();
+    requestAnimationFrame(animate);
+}
+
+animate();
 
 // ===== BUTTON CONTROLS =====
 
