@@ -1,3 +1,4 @@
+console.log(snake);
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
 
@@ -14,7 +15,10 @@ canvas.width = displaySize;
 canvas.height = displaySize;
 
 const size = displaySize;
+let foodSpawnTime = Date.now();
+const FOOD_LIFETIME = 5000;
 
+let highScore = Number(localStorage.getItem("snakeHighScore")) || 0;
 canvas.width = size;
 canvas.height = size;
 
@@ -219,6 +223,8 @@ function gameLoop() {
 
 // ================= DRAW SNAKE =================
 function drawSnake() {
+    if (snake.length === 0) return;
+
     c.beginPath();
     c.moveTo(snake[0].x, snake[0].y);
 
