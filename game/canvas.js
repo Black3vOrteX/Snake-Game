@@ -54,7 +54,7 @@ function resetSnake() {
         });
     }
 }
-
+resetSnake();
 // ================= KEYBOARD CONTROLS =================
 document.addEventListener("keydown", (e) => {
     if (!gameActive) return;
