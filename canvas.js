@@ -10,7 +10,10 @@ highScore = Number(highScore);
 const size = 600;
 canvas.width = size;
 canvas.height = size;
-
+let gamePaused = false;
+const quitOverlay = document.getElementById("quitOverlay");
+const confirmQuitBtn = document.getElementById("confirmQuit");
+const continueBtn = document.getElementById("continueGame");
 // ================= SETTINGS =================
 const MAX_LENGTH = 15;
 const SEGMENT_SPACING = 6;
@@ -89,7 +92,47 @@ function updateTimer() {
     }
 }
 
-// ================= FOOD =================
+// ================= PAUSE/QUIT =================//
+function pauseGame() {
+    if (!gameActive) return;
+
+    gamePaused = true;
+    clearInterval(timerInterval);
+
+    quitOverlay.classList.remove("hidden");
+    quitOverlay.classList.add("show");
+}
+
+function resumeGame() {
+    gamePaused = false;
+
+    if (gameStarted) {
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    quitOverlay.classList.remove("show");
+    quitOverlay.classList.add("hidden");
+}
+// Listen for pause key (P)//
+confirmQuitBtn.addEventListener("click", () => {
+    quitOverlay.classList.remove("show");
+    quitOverlay.classList.add("hidden");
+    gameOver("collision"); // treat as normal end
+});
+
+continueBtn.addEventListener("click", resumeGame);
+//==================== DETECTING TAP =====================//
+document.addEventListener("click", (e) => {
+
+    if (!gameActive || gamePaused) return;
+
+    const canvasWrapper = document.querySelector(".canvas-wrapper");
+
+    if (!canvasWrapper.contains(e.target)) {
+        pauseGame();
+    }
+});
+// ================= FOOD =================//
 function placeFood() {
     food.x = Math.random() * (size - 40) + 20;
     food.y = Math.random() * (size - 40) + 20;
@@ -121,7 +164,7 @@ function drawFood() {
 // ================= GAME LOOP =================
 function gameLoop() {
 
-    if (!gameActive) return;
+    if (!gameActive || gamePaused) return;
 
     c.clearRect(0, 0, size, size);
 
