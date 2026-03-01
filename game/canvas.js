@@ -12,8 +12,16 @@ let foodSpawnTime = Date.now();
 const FOOD_LIFETIME = 5000;
 
 let highScore = Number(localStorage.getItem("snakeHighScore")) || 0;
+const wrapper = document.querySelector(".canvas-wrapper");
 
-const size = Math.min(window.innerWidth - 20, 600);
+const displaySize = Math.min(window.innerWidth - 20, 600);
+
+wrapper.style.maxWidth = displaySize + "px";
+
+canvas.width = displaySize;
+canvas.height = displaySize;
+
+const size = displaySize;
 canvas.width = size;
 canvas.height = size;
 
