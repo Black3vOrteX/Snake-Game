@@ -28,14 +28,26 @@
 
 </div>
     <div class="canvas-wrapper">
-        <div id="gameOverOverlay" class="hidden">
-  <div class="overlay-content">
-    <h2 id="overlayTitle">Game Over</h2>
-    <button id="restartBtn">Restart</button>
-  </div>
-</div>
+
+    <div id="gameOverOverlay" class="hidden">
+        <div class="overlay-content">
+            <h2 id="overlayTitle">Game Over</h2>
+
+            <p class="overlay-score">
+                Score: <span id="finalScore">0</span>
+            </p>
+
+            <p class="overlay-score">
+                High Score: <span id="finalHighScore">0</span>
+            </p>
+
+            <button id="restartBtn">Restart</button>
+        </div>
+    </div>
+
     <canvas id="bgCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
+
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noisejs/2.1.0/perlin.min.js"></script>
     

@@ -3,7 +3,10 @@ const c = canvas.getContext("2d");
 const overlay = document.getElementById("gameOverOverlay");
 const restartBtn = document.getElementById("restartBtn");
 const overlayTitle = document.getElementById("overlayTitle");
-
+let foodSpawnTime = Date.now();
+const FOOD_LIFETIME = 5000; // 5 seconds
+let highScore = localStorage.getItem("snakeHighScore") || 0;
+highScore = Number(highScore);
 const size = 600;
 canvas.width = size;
 canvas.height = size;
@@ -90,6 +93,7 @@ function updateTimer() {
 function placeFood() {
     food.x = Math.random() * (size - 40) + 20;
     food.y = Math.random() * (size - 40) + 20;
+    foodSpawnTime = Date.now(); // reset timer whenever food spawns
 }
 
 function drawFood() {
@@ -183,6 +187,10 @@ function gameLoop() {
 
         placeFood();
     }
+    // FOOD AUTO RESPAWN
+    if (Date.now() - foodSpawnTime > FOOD_LIFETIME) {
+        placeFood();
+    }
 
     drawFood();
     drawSnake();
@@ -225,8 +233,16 @@ function gameOver(reason) {
     clearInterval(timerInterval);
     gameStarted = false;
 
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("snakeHighScore", highScore);
+    }
+
     overlayTitle.textContent =
         reason === "time" ? "Time Up" : "Game Over";
+
+    document.getElementById("finalScore").textContent = score;
+    document.getElementById("finalHighScore").textContent = highScore;
 
     overlay.classList.remove("hidden");
     overlay.classList.add("show");
