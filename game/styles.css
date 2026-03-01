@@ -87,7 +87,7 @@ canvas {
     height: auto;
 
     border-radius: 22px;
-    touch-action: none;
+    
     
     box-shadow:
         0 0 6px rgba(94, 234, 212, 0.15),
@@ -100,24 +100,19 @@ canvas {
 
 .canvas-wrapper {
     position: relative;
-    width: 600px;
-    height: 600px;
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 1 / 1;
     margin: 20px auto;
 }
 
-#bgCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    border-radius: 22px;
-}
-
+#bgCanvas,
 #gameCanvas {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1;
+    width: 100%;
+    height: 100%;
     border-radius: 22px;
 }
     
