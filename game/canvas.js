@@ -7,9 +7,11 @@ let foodSpawnTime = Date.now();
 const FOOD_LIFETIME = 5000; // 5 seconds
 let highScore = localStorage.getItem("snakeHighScore") || 0;
 highScore = Number(highScore);
-const size = 600;
+const size = Math.min(window.innerWidth - 20, 600);
+
 canvas.width = size;
 canvas.height = size;
+
 let gamePaused = false;
 const quitOverlay = document.getElementById("quitOverlay");
 const confirmQuitBtn = document.getElementById("confirmQuit");
