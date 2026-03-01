@@ -36,7 +36,7 @@ let snake = [];
 let targetLength = 5;
 let feedCount = 0;
 
-let food = { x: 300, y: 300 };
+let food = { x: size/2, y: size/2 };
 let foodColors = ["#ff4d4d", "#facc15", "#22c55e", "#3b82f6", "#a855f7"];
 let currentFoodColor = foodColors[0];
 
