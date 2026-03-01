@@ -172,12 +172,30 @@ function updateTimer() {
 }
 
 // ================= FOOD =================
-
 function placeFood() {
-    food.x = Math.random() * (size - 40) + 20;
-    food.y = Math.random() * (size - 40) + 20;
+    let validPosition = false;
+
+    while (!validPosition) {
+        food.x = Math.random() * (size - 40) + 20;
+        food.y = Math.random() * (size - 40) + 20;
+
+        validPosition = true;
+
+        for (let segment of snake) {
+            let dx = segment.x - food.x;
+            let dy = segment.y - food.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 20) {
+                validPosition = false;
+                break;
+            }
+        }
+    }
+
     foodSpawnTime = Date.now();
 }
+
 
 function drawFood() {
     let pulse = Math.sin(Date.now() * 0.01) * 6 + 12;

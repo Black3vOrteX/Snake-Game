@@ -8,9 +8,8 @@
 </head>
 
 <body>
-    
-    
-    <div id="header">
+
+<div id="header">
 
     <div class="score">
         <span class="label">Score:</span>
@@ -27,19 +26,13 @@
     </div>
 
 </div>
-    <div class="canvas-wrapper">
+
+<!-- GAME BOARD -->
+<div class="canvas-wrapper">
 
     <div id="gameOverOverlay" class="hidden">
         <div class="overlay-content">
             <h2 id="overlayTitle">Game Over</h2>
-
-            <div id="quitOverlay" class="hidden">
-  <div class="overlay-content">
-    <h2>Are you sure you want to quit?</h2>
-    <button id="confirmQuit">Quit</button>
-    <button id="continueGame">Keep Playing</button>
-  </div>
-</div>
 
             <p class="overlay-score">
                 Score: <span id="finalScore">0</span>
@@ -55,7 +48,11 @@
 
     <canvas id="bgCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
-    <div class="controls">
+
+</div>
+
+<!-- CONTROLS (OUTSIDE WRAPPER) -->
+<div class="controls">
     <button id="upBtn">▲</button>
 
     <div class="middle-row">
@@ -65,9 +62,7 @@
     </div>
 </div>
 
-</div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noisejs/2.1.0/perlin.min.js"></script>
-    
-    <script src="canvas.js?v=2"></script>
+<script src="canvas.js"></script>
+
 </body>
 </html>
