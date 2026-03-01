@@ -50,11 +50,17 @@ let timerInterval;
 // ================= INIT =================
 function resetSnake() {
     snake = [];
+
+    const centerX = size / 2;
+    const centerY = size / 2;
+
     for (let i = 0; i < targetLength * 10; i++) {
-        snake.push({ x: 200 - i * SEGMENT_SPACING, y: 300 });
+        snake.push({
+            x: centerX - i * SEGMENT_SPACING,
+            y: centerY
+        });
     }
 }
-resetSnake();
 
 // ================= KEYBOARD CONTROLS =================
 document.addEventListener("keydown", (e) => {
