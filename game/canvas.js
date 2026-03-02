@@ -137,8 +137,25 @@ function updateTimer() {
 // ================= FOOD =================
 
 function placeFood() {
-  food.x = Math.random() * (size - 40) + 20;
-  food.y = Math.random() * (size - 40) + 20;
+  let safe = false;
+
+  while (!safe) {
+    food.x = Math.random() * (size - 40) + 20;
+    food.y = Math.random() * (size - 40) + 20;
+
+    safe = true;
+
+    for (let segment of snake) {
+      let dx = food.x - segment.x;
+      let dy = food.y - segment.y;
+
+      if (Math.sqrt(dx * dx + dy * dy) < 40) {
+        safe = false;
+        break;
+      }
+    }
+  }
+
   foodSpawnTime = Date.now();
 }
 
@@ -292,10 +309,10 @@ function gameLoop() {
     scoreIs.textContent = score;
 
     // Change color every 5 feeds
-    if (score % 5 === 0) {
-    let colorIndex = Math.floor(score / 5) % foodColors.length;
+    
+    let colorIndex = Math.floor((score - 1) / 5) % foodColors.length;
     currentFoodColor = foodColors[colorIndex];
-}
+
 
 updateDifficulty();
 placeFood();
@@ -334,6 +351,7 @@ function gameOver(reason) {
 
 function restartGame() {
   clearInterval(timerInterval);
+  currentFoodColor = foodColors[0];
   score = 0;
   targetLength = 5;
   currentSpeed = baseSpeed;
@@ -359,22 +377,46 @@ restartBtn.addEventListener("click", restartGame);
 
 // ================= ANIMATION =================
 
+
+
 let lastTime = 0;
 const fps = 30;
 const interval = 1000 / fps;
 
 function animate(time) {
   if (time - lastTime > interval) {
-    gameLoop();
+    if (gameActive) {
+      gameLoop();
+    }
     lastTime = time;
   }
+
   requestAnimationFrame(animate);
 }
 
 requestAnimationFrame(animate);
 
-
 // ================= MOBILE BUTTON CONTROLS =================
+
+const upBtn = document.getElementById("upBtn");
+const downBtn = document.getElementById("downBtn");
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+function handleDirection(newVelocity) {
+  if (!gameActive) return;
+
+  // Prevent reversing
+  if (
+    (newVelocity.x === -velocity.x && newVelocity.x !== 0) ||
+    (newVelocity.y === -velocity.y && newVelocity.y !== 0)
+  ) {
+    return;
+  }
+
+  velocity = newVelocity;
+  startTimerIfNeeded();
+}
 
 function addMobileControl(button, direction) {
   if (!button) return;
@@ -393,3 +435,4 @@ addMobileControl(upBtn, { x: 0, y: -1 });
 addMobileControl(downBtn, { x: 0, y: 1 });
 addMobileControl(leftBtn, { x: -1, y: 0 });
 addMobileControl(rightBtn, { x: 1, y: 0 });
+
