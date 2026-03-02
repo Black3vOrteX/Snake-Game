@@ -15,7 +15,6 @@ let size;
 function resizeCanvas() {
     const wrapper = document.querySelector(".canvas-wrapper");
     size = wrapper.clientWidth;
-
     canvas.width = size;
     canvas.height = size;
 }
@@ -23,8 +22,7 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", () => {
     resizeCanvas();
-    resetSnake();
-    placeFood();
+    restartGame();
 });
 
 // ================= GAME SETTINGS =================
@@ -35,8 +33,8 @@ const SEGMENT_SPACING = 6;
 let score = 0;
 let timeLeft = 60;
 
-let velocity = { x: 0, y: 0 };
-let baseSpeed = 2;
+let velocity = { x: 1, y: 0 }; // ✅ start moving right (fix reverse bug)
+let baseSpeed = 4.5;
 let currentSpeed = baseSpeed;
 
 let snake = [];
@@ -60,11 +58,10 @@ let highScore = Number(localStorage.getItem("snakeHighScore")) || 0;
 
 function resetSnake() {
     snake = [];
-
     const centerX = size / 2;
     const centerY = size / 2;
 
-    for (let i = 0; i < targetLength * 10; i++) {
+    for (let i = 0; i < targetLength * 6; i++) { // ✅ reduced density
         snake.push({
             x: centerX - i * SEGMENT_SPACING,
             y: centerY
@@ -73,10 +70,10 @@ function resetSnake() {
 }
 
 resetSnake();
+placeFood();
 
 // ================= INPUT =================
 
-// Keyboard
 document.addEventListener("keydown", (e) => {
     if (!gameActive) return;
 
@@ -92,49 +89,12 @@ document.addEventListener("keydown", (e) => {
     startTimerIfNeeded();
 });
 
-// Touch
-let touchStartX = 0;
-let touchStartY = 0;
-
-canvas.addEventListener("touchstart", (e) => {
-    const touch = e.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-}, { passive: true });
-
-canvas.addEventListener("touchend", (e) => {
-    if (!gameActive) return;
-
-    const touch = e.changedTouches[0];
-    let dx = touch.clientX - touchStartX;
-    let dy = touch.clientY - touchStartY;
-
-    if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
-
-    if (Math.abs(dx) > Math.abs(dy)) {
-        if (dx > 0 && velocity.x === 0)
-            velocity = { x: 1, y: 0 };
-        else if (dx < 0 && velocity.x === 0)
-            velocity = { x: -1, y: 0 };
-    } else {
-        if (dy > 0 && velocity.y === 0)
-            velocity = { x: 0, y: 1 };
-        else if (dy < 0 && velocity.y === 0)
-            velocity = { x: 0, y: -1 };
-    }
-
-    startTimerIfNeeded();
-}, { passive: true });
-
 function startTimerIfNeeded() {
-    if (!gameStarted && (velocity.x !== 0 || velocity.y !== 0)) {
+    if (!gameStarted) {
         gameStarted = true;
         timerInterval = setInterval(updateTimer, 1000);
     }
 }
-
-
-
 
 // ================= TIMER =================
 
@@ -151,56 +111,38 @@ function updateTimer() {
 }
 
 // ================= FOOD =================
+
 function placeFood() {
-    let validPosition = false;
-
-    while (!validPosition) {
-        food.x = Math.random() * (size - 40) + 20;
-        food.y = Math.random() * (size - 40) + 20;
-
-        validPosition = true;
-
-        for (let segment of snake) {
-            let dx = segment.x - food.x;
-            let dy = segment.y - food.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < 20) {
-                validPosition = false;
-                break;
-            }
-        }
-    }
-
-    foodSpawnTime = Date.now();
+    food.x = Math.random() * (size - 40) + 20;
+    food.y = Math.random() * (size - 40) + 20;
+    foodSpawnTime = Date.now(); // important
 }
-
 
 function drawFood() {
     let time = Date.now();
 
-    let pulse = Math.sin(time * 0.008) * 8 + 18;
-    let floatOffset = Math.sin(time * 0.004) * 4;
+    let pulse = Math.sin(time * 0.008) * 6 + 14;
+    let floatOffset = Math.sin(time * 0.0015) * 2;
 
     c.save();
     c.translate(food.x, food.y + floatOffset);
 
-    // ===== SOFT OUTER GLOW =====
+    // Soft outer glow (lighter for performance)
     c.beginPath();
-    c.ellipse(0, 0, 16, 20, 0, 0, Math.PI * 2);
+    c.ellipse(0, 0, 14, 18, 0, 0, Math.PI * 2);
     c.fillStyle = currentFoodColor;
-    c.globalAlpha = 0.15;
+    c.globalAlpha = 0.2;
     c.shadowColor = currentFoodColor;
     c.shadowBlur = pulse;
     c.fill();
 
     c.globalAlpha = 1;
 
-    // ===== MAIN EGG =====
+    // Main egg body
     c.beginPath();
     c.ellipse(0, 0, 10, 14, 0, 0, Math.PI * 2);
 
-    let gradient = c.createRadialGradient(0, -5, 2, 0, 0, 14);
+    let gradient = c.createRadialGradient(0, -4, 2, 0, 0, 14);
     gradient.addColorStop(0, "#ffffff");
     gradient.addColorStop(0.4, currentFoodColor);
     gradient.addColorStop(1, currentFoodColor);
@@ -209,11 +151,85 @@ function drawFood() {
     c.shadowBlur = 0;
     c.fill();
 
-    // ===== GLOSS HIGHLIGHT =====
+    // Gloss highlight
     c.beginPath();
-    c.ellipse(-3, -5, 3, 5, 0, 0, Math.PI * 2);
-    c.fillStyle = "rgba(255,255,255,0.5)";
+    c.ellipse(-3, -5, 3, 4, 0, 0, Math.PI * 2);
+    c.fillStyle = "rgba(255,255,255,0.6)";
     c.fill();
+
+    c.restore();
+}
+
+// ================= DRAW SNAKE =================
+
+function drawSnake() {
+    if (snake.length === 0) return;
+
+    // ===== BODY =====
+    c.beginPath();
+    c.moveTo(snake[0].x, snake[0].y);
+
+    for (let i = 1; i < snake.length - 2; i++) {
+        const xc = (snake[i].x + snake[i + 1].x) / 2;
+        const yc = (snake[i].y + snake[i + 1].y) / 2;
+        c.quadraticCurveTo(snake[i].x, snake[i].y, xc, yc);
+    }
+
+    c.lineWidth = 14;
+
+    let gradient = c.createLinearGradient(
+        snake[0].x, snake[0].y,
+        snake[snake.length - 1].x,
+        snake[snake.length - 1].y
+    );
+    gradient.addColorStop(0, "#5eead4");
+    gradient.addColorStop(1, "#00cc88");
+
+    c.strokeStyle = gradient;
+    c.shadowColor = "#5eead4";
+    c.shadowBlur = 10;
+    c.stroke();
+
+    c.shadowBlur = 0;
+
+    // ===== HEAD (ENHANCED) =====
+    const head = snake[0];
+    const time = Date.now();
+    const breathe = Math.sin(time * 0.01) * 1.2 + 8;
+
+    c.save();
+    c.translate(head.x, head.y);
+
+    // Outer glow pulse
+    c.beginPath();
+    c.arc(0, 0, breathe + 3, 0, Math.PI * 2);
+    c.fillStyle = "#5eead4";
+    c.globalAlpha = 0.15;
+    c.shadowColor = "#5eead4";
+    c.shadowBlur = 15;
+    c.fill();
+
+    c.globalAlpha = 1;
+    c.shadowBlur = 0;
+
+    // Main head body
+    c.beginPath();
+    c.arc(0, 0, breathe, 0, Math.PI * 2);
+
+    let headGradient = c.createRadialGradient(0, -3, 2, 0, 0, breathe);
+    headGradient.addColorStop(0, "#ffffff");
+    headGradient.addColorStop(0.3, "#5eead4");
+    headGradient.addColorStop(1, "#00cc88");
+
+    c.fillStyle = headGradient;
+    c.fill();
+
+    // Subtle shine line
+    c.beginPath();
+    c.arc(0, -breathe / 2, breathe / 3, 0, Math.PI);
+    c.strokeStyle = "rgba(255,255,255,0.3)";
+    c.lineWidth = 2;
+    c.stroke();
 
     c.restore();
 }
@@ -224,12 +240,6 @@ function gameLoop() {
 
     c.clearRect(0, 0, size, size);
 
-    if (velocity.x === 0 && velocity.y === 0) {
-        drawFood();
-        drawSnake();
-        return;
-    }
-
     let head = snake[0];
     let newHead = {
         x: head.x + velocity.x * currentSpeed,
@@ -238,7 +248,7 @@ function gameLoop() {
 
     snake.unshift(newHead);
 
-    while (snake.length > targetLength * 10)
+    while (snake.length > targetLength * 6)
         snake.pop();
 
     // Wall collision
@@ -250,22 +260,12 @@ function gameLoop() {
         return;
     }
 
-    // Self collision
-    for (let i = 20; i < snake.length; i++) {
-        let dx = newHead.x - snake[i].x;
-        let dy = newHead.y - snake[i].y;
-        if (Math.sqrt(dx * dx + dy * dy) < 8) {
-            gameOver("collision");
-            return;
-        }
-    }
-
     // Food collision
     let dx = newHead.x - food.x;
     let dy = newHead.y - food.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < 15) {
+    if (distance < 14) {
         if (targetLength < MAX_LENGTH)
             targetLength++;
 
@@ -274,74 +274,19 @@ function gameLoop() {
         scoreIs.textContent = score;
 
         if (feedCount % 5 === 0) {
-            currentSpeed += 0.4;
+            currentSpeed += 0.3;
             let colorIndex = Math.floor(feedCount / 5) % foodColors.length;
             currentFoodColor = foodColors[colorIndex];
         }
 
         placeFood();
     }
-
-    if (Date.now() - foodSpawnTime > FOOD_LIFETIME)
-        placeFood();
+    if (Date.now() - foodSpawnTime >= FOOD_LIFETIME) {
+    placeFood();
+}
 
     drawFood();
     drawSnake();
-}
-
-// ================= DRAW SNAKE =================
-
-function drawSnake() {
-    if (snake.length === 0) return;
-
-    // ===== BODY GLOW LAYER =====
-    c.beginPath();
-    c.moveTo(snake[0].x, snake[0].y);
-
-    for (let i = 1; i < snake.length - 2; i++) {
-        const xc = (snake[i].x + snake[i + 1].x) / 2;
-        const yc = (snake[i].y + snake[i + 1].y) / 2;
-        c.quadraticCurveTo(snake[i].x, snake[i].y, xc, yc);
-    }
-
-    c.lineWidth = 18;
-    c.strokeStyle = "rgba(94, 234, 212, 0.25)";
-    c.shadowColor = "#5eead4";
-    c.shadowBlur = 25;
-    c.stroke();
-
-    // ===== BODY CORE LAYER =====
-    c.beginPath();
-    c.moveTo(snake[0].x, snake[0].y);
-
-    for (let i = 1; i < snake.length - 2; i++) {
-        const xc = (snake[i].x + snake[i + 1].x) / 2;
-        const yc = (snake[i].y + snake[i + 1].y) / 2;
-        c.quadraticCurveTo(snake[i].x, snake[i].y, xc, yc);
-    }
-
-    c.lineWidth = 14;
-    let gradient = c.createLinearGradient(
-    snake[0].x, snake[0].y,
-    snake[snake.length - 1].x,
-    snake[snake.length - 1].y
-);
-    gradient.addColorStop(0, "#5eead4");
-    gradient.addColorStop(1, "#00cc88");
-c.strokeStyle = gradient;
-    c.shadowBlur = 0;
-    c.stroke();
-
-    // ===== HEAD GLOW =====
-    c.beginPath();
-    c.arc(snake[0].x, snake[0].y, 9, 0, Math.PI * 2);
-    c.fillStyle = "#5eead4";
-    c.shadowColor = "#5eead4";
-    c.shadowBlur = 30;
-    c.fill();
-
-    // reset shadow
-    c.shadowBlur = 0;
 }
 
 // ================= GAME OVER =================
@@ -349,10 +294,6 @@ c.strokeStyle = gradient;
 function gameOver(reason) {
     gameActive = false;
     clearInterval(timerInterval);
-    gameStarted = false;
-
-    // ✅ SEND SCORE ONCE
-    sendScoreToLeaderboard(score);
 
     if (score > highScore) {
         highScore = score;
@@ -369,25 +310,6 @@ function gameOver(reason) {
     overlay.classList.add("show");
 }
 
-
-function sendScoreToLeaderboard(finalScore) {
-  const name = localStorage.getItem("username");
-
-  fetch("https://script.google.com/macros/s/AKfycbxnqhmEeUeYt6y7EMIybN0GPxFSt-lBJUuO_g4x9L7gLAYH8wpb6MbpQhcfPQwazRYk/exec", {
-    method: "POST",
-    body: JSON.stringify({
-      name: name,
-      score: finalScore
-    })
-  });
-}
-
-
-
-
-
-
-
 // ================= RESTART =================
 
 function restartGame() {
@@ -401,49 +323,31 @@ function restartGame() {
     timeLeft = 60;
     timeDisplay.textContent = "60";
 
-    velocity = { x: 0, y: 0 };
+    velocity = { x: 1, y: 0 }; // reset right
+    gameStarted = false;
+    gameActive = true;
 
     resetSnake();
     placeFood();
 
     overlay.classList.remove("show");
     overlay.classList.add("hidden");
-
-    gameStarted = false;
-    gameActive = true;
 }
 
-placeFood();
 restartBtn.addEventListener("click", restartGame);
-function animate() {
-    gameLoop();
+
+// ================= OPTIMIZED ANIMATION (30 FPS) =================
+
+let lastTime = 0;
+const fps = 30;
+const interval = 1000 / fps;
+
+function animate(time) {
+    if (time - lastTime > interval) {
+        gameLoop();
+        lastTime = time;
+    }
     requestAnimationFrame(animate);
 }
 
-animate();
-
-// ===== BUTTON CONTROLS =====
-
-const upBtn = document.getElementById("upBtn");
-const downBtn = document.getElementById("downBtn");
-const leftBtn = document.getElementById("leftBtn");
-const rightBtn = document.getElementById("rightBtn");
-
-function changeDirection(newVel) {
-    if (!gameActive) return;
-
-    if (
-        (newVel.x !== 0 && velocity.x === 0) ||
-        (newVel.y !== 0 && velocity.y === 0)
-    ) {
-        velocity = newVel;
-        startTimerIfNeeded();
-    }
-}
-
-["touchstart", "click"].forEach(type => {
-    upBtn.addEventListener(type, () => changeDirection({ x: 0, y: -1 }));
-    downBtn.addEventListener(type, () => changeDirection({ x: 0, y: 1 }));
-    leftBtn.addEventListener(type, () => changeDirection({ x: -1, y: 0 }));
-    rightBtn.addEventListener(type, () => changeDirection({ x: 1, y: 0 }));
-});
+requestAnimationFrame(animate);
