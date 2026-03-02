@@ -376,38 +376,20 @@ requestAnimationFrame(animate);
 
 // ================= MOBILE BUTTON CONTROLS =================
 
-const upBtn = document.getElementById("upBtn");
-const downBtn = document.getElementById("downBtn");
-const leftBtn = document.getElementById("leftBtn");
-const rightBtn = document.getElementById("rightBtn");
+function addMobileControl(button, direction) {
+  if (!button) return;
 
-function handleDirection(newVelocity) {
-  if (!gameActive) return;
+  button.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    handleDirection(direction);
+  });
 
-  // Prevent reversing into itself
-  if (
-    (newVelocity.x === -velocity.x && newVelocity.x !== 0) ||
-    (newVelocity.y === -velocity.y && newVelocity.y !== 0)
-  ) {
-    return;
-  }
-
-  velocity = newVelocity;
-  startTimerIfNeeded();
+  button.addEventListener("click", () => {
+    handleDirection(direction);
+  });
 }
 
-upBtn.addEventListener("click", () =>
-  handleDirection({ x: 0, y: -1 })
-);
-
-downBtn.addEventListener("click", () =>
-  handleDirection({ x: 0, y: 1 })
-);
-
-leftBtn.addEventListener("click", () =>
-  handleDirection({ x: -1, y: 0 })
-);
-
-rightBtn.addEventListener("click", () =>
-  handleDirection({ x: 1, y: 0 })
-);
+addMobileControl(upBtn, { x: 0, y: -1 });
+addMobileControl(downBtn, { x: 0, y: 1 });
+addMobileControl(leftBtn, { x: -1, y: 0 });
+addMobileControl(rightBtn, { x: 1, y: 0 });
