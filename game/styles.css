@@ -140,6 +140,10 @@ canvas {
     height: 100%;
     border-radius: 22px;
 }
+
+#gameCanvas {
+  z-index: 1;
+}
     
 #gameOverOverlay {
   position: fixed;
@@ -207,6 +211,7 @@ canvas {
     margin: 20px auto 40px auto;
     display: flex;
     justify-content: center;
+    z-index: 5;
 }
 
 .dpad {
