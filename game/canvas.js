@@ -295,6 +295,9 @@ function gameOver(reason) {
     clearInterval(timerInterval);
     gameStarted = false;
 
+    // ✅ SEND SCORE ONCE
+    sendScoreToLeaderboard(score);
+
     if (score > highScore) {
         highScore = score;
         localStorage.setItem("snakeHighScore", highScore);
@@ -309,6 +312,25 @@ function gameOver(reason) {
     overlay.classList.remove("hidden");
     overlay.classList.add("show");
 }
+
+
+function sendScoreToLeaderboard(finalScore) {
+  const name = localStorage.getItem("username");
+
+  fetch("https://script.google.com/macros/s/AKfycbxnqhmEeUeYt6y7EMIybN0GPxFSt-lBJUuO_g4x9L7gLAYH8wpb6MbpQhcfPQwazRYk/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      score: finalScore
+    })
+  });
+}
+
+
+
+
+
+
 
 // ================= RESTART =================
 
