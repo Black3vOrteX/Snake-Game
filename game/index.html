@@ -40,6 +40,16 @@
 
             <button id="restartBtn">Restart</button>
         </div>
+        <div id="quitOverlay" class="hidden">
+            <div class="overlay-content">
+                <h2>Quit Game?</h2>
+                    <p class="overlay-score">
+                         All progress will be lost.
+                    </p>
+            <button id="continueBtn">Continue</button>
+            <button id="quitBtn">Quit</button>
+    </div>
+</div>
     </div>
 
     <canvas id="bgCanvas"></canvas>
@@ -56,6 +66,13 @@
 </div>
 
 <script src="canvas.js"></script>
-
+<div id="rotateOverlay" class="hidden">
+  <div class="overlay-content">
+    <h2>Please Rotate Device</h2>
+    <p class="overlay-score">
+      This game is best played in portrait mode.
+    </p>
+  </div>
+</div>
 </body>
 </html>

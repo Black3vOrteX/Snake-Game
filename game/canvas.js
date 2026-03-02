@@ -7,7 +7,7 @@ const overlayTitle = document.getElementById("overlayTitle");
 
 const scoreIs = document.querySelector(".score .value");
 const timeDisplay = document.querySelector(".time .value");
-
+const Session_duration = 120;
 // ================= RESPONSIVE SIZE =================
 
 let size;
@@ -31,7 +31,7 @@ const MAX_LENGTH = 15;
 const SEGMENT_SPACING = 6;
 
 let score = 0;
-let timeLeft = 60;
+let timeLeft = Session_duration;
 
 let velocity = { x: 1, y: 0 }; // ✅ start moving right (fix reverse bug)
 let baseSpeed = 4.5;
@@ -50,7 +50,7 @@ let gameActive = true;
 let timerInterval;
 
 let foodSpawnTime = Date.now();
-const FOOD_LIFETIME = 5000;
+const FOOD_LIFETIME = 7000;
 
 let highScore = Number(localStorage.getItem("snakeHighScore")) || 0;
 
@@ -260,6 +260,18 @@ function gameLoop() {
         return;
     }
 
+    // ================= SELF COLLISION =================
+    for (let i = 10; i < snake.length; i++) {
+    let dx = newHead.x - snake[i].x;
+    let dy = newHead.y - snake[i].y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < 8) {
+        gameOver("collision");
+        return;
+    }
+    }
+
     // Food collision
     let dx = newHead.x - food.x;
     let dy = newHead.y - food.y;
@@ -313,25 +325,23 @@ function gameOver(reason) {
 // ================= RESTART =================
 
 function restartGame() {
-    score = 0;
-    targetLength = 5;
-    feedCount = 0;
-    currentSpeed = baseSpeed;
-    currentFoodColor = foodColors[0];
+  score = 0;
+  targetLength = 5;
+  feedCount = 0;
+  currentSpeed = baseSpeed;
+  currentFoodColor = foodColors[0];
+  scoreIs.textContent = score;
 
-    scoreIs.textContent = score;
-    timeLeft = 60;
-    timeDisplay.textContent = "60";
+  timeLeft = Session_duration;
+  timeDisplay.textContent = SESSION_DURATION.toString().padStart(2, "0");
 
-    velocity = { x: 1, y: 0 }; // reset right
-    gameStarted = false;
-    gameActive = true;
-
-    resetSnake();
-    placeFood();
-
-    overlay.classList.remove("show");
-    overlay.classList.add("hidden");
+  velocity = { x: 1, y: 0 };
+  gameStarted = false;
+  gameActive = true;
+  resetSnake();
+  placeFood();
+  overlay.classList.remove("show");
+  overlay.classList.add("hidden");
 }
 
 restartBtn.addEventListener("click", restartGame);
@@ -376,3 +386,48 @@ rightBtn.addEventListener("click", () => {
   if (velocity.x === 0) velocity = { x: 1, y: 0 };
   startTimerIfNeeded();
 });
+
+// Push a fake history state when game loads
+history.pushState({ game: true }, "");
+window.addEventListener("popstate", function (event) {
+  if (gameActive) {
+    showQuitOverlay();
+    // Push state again so back doesn't exit
+    history.pushState({ game: true }, "");
+  }
+});
+
+const quitOverlay = document.getElementById("quitOverlay");
+const continueBtn = document.getElementById("continueBtn");
+const quitBtn = document.getElementById("quitBtn");
+
+function showQuitOverlay() {
+  gameActive = false;
+  quitOverlay.classList.remove("hidden");
+  quitOverlay.classList.add("show");
+}
+
+continueBtn.addEventListener("click", () => {
+  gameActive = true;
+  quitOverlay.classList.remove("show");
+  quitOverlay.classList.add("hidden");
+});
+
+quitBtn.addEventListener("click", () => {
+  window.location.href = "index.html"; // or login page
+});
+
+function checkOrientation() {
+  if (window.innerWidth > window.innerHeight) {
+    document.getElementById("rotateOverlay").classList.remove("hidden");
+    gameActive = false;
+  } else {
+    document.getElementById("rotateOverlay").classList.add("hidden");
+    gameActive = true;
+  }
+}
+
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
+
+checkOrientation();
