@@ -11,7 +11,7 @@ body {
         #111827 0%,
         #0b1120 60%,
         #05080f 100%);
-        min-height: 100vh;
+        min-height: 100dvh;
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -204,67 +204,51 @@ canvas {
     position: relative;
     width: 100%;
     max-width: 600px;
-    margin: -40px auto 40px auto; /* negative pulls it upward */
+    margin: 20px auto 40px auto;
     display: flex;
     justify-content: center;
 }
 
 .dpad {
-    position: relative;
-    width: 150px;
-    height: 150px;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
 }
 
 .dpad-btn {
-    position: absolute;
-    width: 55px;
-    height: 55px;
-    border-radius: 16px;
-    border: none;
-    background: rgba(17, 24, 39, 0.9);
-    color: #5eead4;
-    font-size: 22px;
-    box-shadow:
-        0 0 10px rgba(94, 234, 212, 0.5),
-        inset 0 0 8px rgba(94, 234, 212, 0.2);
-    cursor: pointer;
-    transition: transform 0.08s ease,
-                box-shadow 0.2s ease,
-                background 0.2s ease;
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  border-radius: 16px;
+  border: none;
+  background: rgba(17, 24, 39, 0.9);
+  color: #5eead4;
+  font-size: 22px;
+  cursor: pointer;
 }
 
-.dpad-btn:active {
-    transform: scale(0.85);
-    background: rgba(94,234,212,0.2);
-    box-shadow:
-        0 0 20px rgba(94,234,212,0.8),
-        inset 0 0 10px rgba(94,234,212,0.6);
+/* Center reference point */
+.dpad-btn {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-
-/* Position buttons in cross shape */
 
 .up {
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+  transform: translate(-50%, -150%);
 }
 
 .down {
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+  transform: translate(-50%, 50%);
 }
 
 .left {
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+  transform: translate(-150%, -50%);
 }
 
 .right {
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+  transform: translate(50%, -50%);
 }
 
 @keyframes bgShift {

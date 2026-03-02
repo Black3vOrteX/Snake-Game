@@ -351,3 +351,28 @@ function animate(time) {
 }
 
 requestAnimationFrame(animate);
+
+const upBtn = document.getElementById("upBtn");
+const downBtn = document.getElementById("downBtn");
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+upBtn.addEventListener("click", () => {
+  if (velocity.y === 0) velocity = { x: 0, y: -1 };
+  startTimerIfNeeded();
+});
+
+downBtn.addEventListener("click", () => {
+  if (velocity.y === 0) velocity = { x: 0, y: 1 };
+  startTimerIfNeeded();
+});
+
+leftBtn.addEventListener("click", () => {
+  if (velocity.x === 0) velocity = { x: -1, y: 0 };
+  startTimerIfNeeded();
+});
+
+rightBtn.addEventListener("click", () => {
+  if (velocity.x === 0) velocity = { x: 1, y: 0 };
+  startTimerIfNeeded();
+});
