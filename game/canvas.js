@@ -372,3 +372,42 @@ function animate(time) {
 }
 
 requestAnimationFrame(animate);
+
+
+// ================= MOBILE BUTTON CONTROLS =================
+
+const upBtn = document.getElementById("upBtn");
+const downBtn = document.getElementById("downBtn");
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+function handleDirection(newVelocity) {
+  if (!gameActive) return;
+
+  // Prevent reversing into itself
+  if (
+    (newVelocity.x === -velocity.x && newVelocity.x !== 0) ||
+    (newVelocity.y === -velocity.y && newVelocity.y !== 0)
+  ) {
+    return;
+  }
+
+  velocity = newVelocity;
+  startTimerIfNeeded();
+}
+
+upBtn.addEventListener("click", () =>
+  handleDirection({ x: 0, y: -1 })
+);
+
+downBtn.addEventListener("click", () =>
+  handleDirection({ x: 0, y: 1 })
+);
+
+leftBtn.addEventListener("click", () =>
+  handleDirection({ x: -1, y: 0 })
+);
+
+rightBtn.addEventListener("click", () =>
+  handleDirection({ x: 1, y: 0 })
+);
