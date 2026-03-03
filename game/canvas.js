@@ -36,7 +36,7 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", () => {
   resizeCanvas();
-  restartGame();
+  
 });
 
 // ================= GAME SETTINGS =================
