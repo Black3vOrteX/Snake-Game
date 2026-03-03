@@ -8,7 +8,7 @@ const overlayTitle = document.getElementById("overlayTitle");
 const scoreIs = document.querySelector(".score .value");
 const timeDisplay = document.querySelector(".time .value");
 
-const SESSION_DURATION = 120;
+const SESSION_DURATION = 80;
 
 // ================= RESPONSIVE SIZE =================
 
@@ -74,26 +74,37 @@ placeFood();
 
 // ================= DIFFICULTY SYSTEM =================
 
-function getFoodLifetime() {
-  if (score > 25) return 4200;
-  if (score >= 15) return 4500;
-  if (score >= 10) return 5000;
-  if (score >= 5) return 6000;
-  return 7000;
+//function getFoodLifetime() {
+//  if (score > 30) return 2500;
+//  if (score > 25) return 3200;
+// if (score >= 15) return 3800;
+//  if (score >= 10) return 4500;
+//  if (score >= 5) return 5500;
+//  return 6500;
+//}
+
+//function updateDifficulty() {
+//  if (score >= 30) {
+//    currentSpeed = baseSpeed + 3.0;
+//  } else if (score >= 20) {
+//   currentSpeed = baseSpeed + 2.2;
+//  } else if (score >= 15) {
+//    currentSpeed = baseSpeed + 1.6;
+//  } else if (score >= 10) {
+//   currentSpeed = baseSpeed + 1.1;
+//  } else if (score >= 5) {
+//    currentSpeed = baseSpeed + 0.7;
+//  } else {
+//    currentSpeed = baseSpeed;
+//  }
+//}
+function updateDifficulty() {
+  currentSpeed = baseSpeed + score * 0.12;
 }
 
-function updateDifficulty() {
-  if (score > 25) {
-    currentSpeed = baseSpeed + 2.0;
-  } else if (score >= 15) {
-    currentSpeed = baseSpeed + 1.5;
-  } else if (score >= 10) {
-    currentSpeed = baseSpeed + 1.0;
-  } else if (score >= 5) {
-    currentSpeed = baseSpeed + 0.6;
-  } else {
-    currentSpeed = baseSpeed;
-  }
+function getFoodLifetime() {
+  let lifetime = 7000 - score * 120;
+  return Math.max(lifetime, 2000);
 }
 
 // ================= INPUT =================
