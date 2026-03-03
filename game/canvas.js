@@ -375,51 +375,84 @@ let lastTinguMessage = "";
 function getTinguMessage(score, reason) {
 
   const messages = {
-    zero: [
-      "Start cheyyaledu kuda… warm up ani cheppava?",
-      "0 aa? Even tutorial skip chesava?",
-      "Nuvvu aadava… leda vibe check ki vachava?"
-    ],
-
-    low: [
-      "Skill issue ra.",
-      "Confidence ekkuva… reflex slow.",
-      "Ila aadithe jungle lo internship kuda raadhu.",
-      "One more try antaava? Sarey chuddam."
-    ],
-
-    mid: [
-      "Okay okay… finally brain ON chesava?",
-      "Konchem improve ayyaav… I’ll allow it.",
-      "Not bad… but still beta version.",
-      "Heat lo unnav… but not lava level."
-    ],
-
-    good: [
-      "Ahh! Ippudu manchi form lo unnav.",
-      "Respect konchem perigindi.",
-      "Idhe maintain cheyyi… ego perigakunda.",
-      "Now we’re talking ra."
-    ],
-
-    insane: [
-      "Wah champion… ipudu nenu alert mode lo unna.",
-      "Dangerous player vibes.",
-      "Okay this was clean… I’m impressed.",
-      "Nuvvu practice chesthunnaav ani ardham avthundi."
-    ],
-
-    wall: [
-      "Wall ni blame chesthava ippudu?",
-      "Map fixed… problem nuvve.",
-      "Straight ga wall lo dive chesav ra."
-    ],
-
     self: [
       "Self sabotage ante idi.",
       "Nuvve ninnu tinnesukunnaav.",
-      "Inner demons win ayyaru."
-    ]
+      "Brain lag ayyindha?",
+      "Nuvve ninnu out cheskunnaav."
+    ],
+
+    wallLow: [
+    "Wall ni blame chesthava ippudu? Skill issue ra.",
+    "Start chesi direct crash aa? Warm up ekkada?",
+    "Straight ga wall lo dive chesav… impressive stupidity."
+  ],
+
+  wallMid: [
+    "Crash ayyaav… at least score konchem undi.",
+    "Wall akkade undi… but okay, minor progress.",
+    "Reflex slow kaadu… judgement slow."
+  ],
+
+  wallGood: [
+    "Mid-run lo crash ayyaav… pressure handle cheyyaledu.",
+    "Decent flow… but control slip ayyindi.",
+    "Konchem focus unte save ayyedhi."
+  ],
+
+  wallHigh: [
+    "Strong run… last lo wall tho friendship.",
+    "Solid performance… unfortunate ending.",
+    "Wall tho close interaction unnecessary."
+  ],
+
+  wallElite: [
+    "Almost master level… but tiny mistake.",
+    "Legend run almost… but wall said no.",
+    "That hurt. Even I felt that crash."
+  ],
+
+  wallGod: [
+    "60 reach chesi wall? Tragic hero.",
+    "That was championship level until that crash.",
+    "Almost history create chesav… wall interrupt chesindi."
+  ],
+
+    timeLow: [
+    "80 seconds lo idi aa result?",
+    "Neeku evi vaddule.. poye chaduvuko",
+    "Time expired before effort started."
+  ],
+
+  timeMid: [
+    "Pressure lo slip ayyaav.",
+    "Time tho race close ga undi.",
+    "Last stretch lo stamina drop."
+  ],
+
+  timeGood: [
+    "Good run… but seconds betrayed you.",
+    "Strong pace… but time ruthless.",
+    "Almost rhythm perfect."
+  ],
+
+  timeHigh: [
+    "That was dramatic.",
+    "Clock ni almost dominate chesav.",
+    "This was cinematic."
+  ],
+
+  timeElite: [
+    "Almost legendary timing.",
+    "One more second unte history.",
+    "That ending felt illegal."
+  ],
+
+  timeGod: [
+    "Time itself struggled to stop you.",
+    "This was elite gameplay.",
+    "I’m officially impressed."
+  ]
   };
 
   function random(arr) {
@@ -429,27 +462,47 @@ function getTinguMessage(score, reason) {
     } while (msg === lastTinguMessage && arr.length > 1);
 
     lastTinguMessage = msg;
+    console.log("Final message:", result.trim());
     return msg;
   }
 
-  // Rare chaotic line (5%)
-  if (Math.random() < 0.05) {
-    return "Nee confidence ki separate leaderboard create cheyyali ra.";
+  //  SELF 
+  if (reason === "self") {
+    return random(messages.self);
   }
 
+  let result = "";
+
+  // 2 TIME
+  if (reason === "time") {
+    result += random(messages.time) + " ";
+
+    if (score >= 25) {
+      result += "Almost legendary. So close ra.";
+    }
+  }
+
+  // 3 WALL
   if (reason === "wall") {
-  return random(messages.wall);
+  if (score < 5) return random(messages.wallLow);
+  if (score < 15) return random(messages.wallMid);
+  if (score < 30) return random(messages.wallGood);
+  if (score < 45) return random(messages.wallHigh);
+  if (score < 60) return random(messages.wallElite);
+  return random(messages.wallGod);
 }
 
-if (reason === "self") {
-  return random(messages.self);
+ 
+  if (reason === "time") {
+  if (score < 5) return random(messages.timeLow);
+  if (score < 15) return random(messages.timeMid);
+  if (score < 30) return random(messages.timeGood);
+  if (score < 45) return random(messages.timeHigh);
+  if (score < 60) return random(messages.timeElite);
+  return random(messages.timeGod);
 }
 
-  if (score === 0) return random(messages.zero);
-  if (score < 5) return random(messages.low);
-  if (score < 15) return random(messages.mid);
-  if (score < 30) return random(messages.good);
-  return random(messages.insane);
+  return result.trim();
 }
 // ================= RESTART =================
 
