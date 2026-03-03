@@ -14,9 +14,12 @@ const startGameBtn = document.getElementById("startGameBtn");
 history.pushState(null, null, location.href);
 
 startGameBtn.addEventListener("click", () => {
-  introOverlay.style.display = "none";
+  introOverlay.classList.add("hidden");   
   gameInitialized = true;
   restartGame();
+
+  
+  history.pushState({ game: true }, null, location.href);
 });
 
 overlay.classList.remove("show");
@@ -293,6 +296,12 @@ function gameLoop() {
 
   c.clearRect(0, 0, size, size);
 
+  if (velocity.x === 0 && velocity.y === 0) {
+    drawFood();
+    drawSnake();
+    return;
+  }
+
   let head = snake[0];
   let newHead = {
     x: head.x + velocity.x * currentSpeed,
@@ -466,7 +475,7 @@ function getTinguMessage(score, reason) {
     } while (msg === lastTinguMessage && arr.length > 1);
 
     lastTinguMessage = msg;
-    console.log("Final message:", result.trim());
+    
     return msg;
   }
 
@@ -710,4 +719,11 @@ continueBtn.addEventListener("click", () => {
 
 quitBtn.addEventListener("click", () => {
   window.location.href = "Leaderboard.html";
+});
+
+window.addEventListener("popstate", function () {
+  if (gameInitialized) {
+    showQuitOverlay();
+    history.pushState(null, null, location.href);
+  }
 });

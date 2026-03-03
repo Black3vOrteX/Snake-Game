@@ -40,6 +40,8 @@
   </div>
 </div>
 <div class="canvas-wrapper">
+
+    <!-- GAME OVER -->
     <div id="gameOverOverlay" class="hidden">
         <div class="overlay-content">
             <h2 id="overlayTitle">Game Over</h2>
@@ -52,24 +54,27 @@
                 High Score: <span id="finalHighScore">0</span>
             </p>
 
-<p id="tinguMessage" class="tingu-text"></p>
+            <p id="tinguMessage" class="tingu-text"></p>
 
             <button id="restartBtn">Restart</button>
         </div>
-        <div id="quitOverlay" class="hidden">
-            <div class="overlay-content">
-                <h2>Quit Game?</h2>
-                    <p class="overlay-score">
-                         All progress will be lost.
-                    </p>
+    </div> 
+
+    
+    <div id="quitOverlay" class="hidden">
+        <div class="overlay-content">
+            <h2>Quit Game?</h2>
+            <p class="overlay-score">
+                All progress will be lost.
+            </p>
             <button id="continueBtn">Continue</button>
             <button id="quitBtn">Quit</button>
-    </div>
-</div>
+        </div>
     </div>
 
     <canvas id="bgCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
+
 </div>
 
 <div class="controls">
@@ -80,8 +85,6 @@
         <button id="downBtn" class="dpad-btn down">▼</button>
     </div>
 </div>
-
-<script src="canvas.js"></script>
 <div id="rotateOverlay" class="hidden">
     
   <div class="overlay-content">
@@ -91,5 +94,7 @@
     </p>
   </div>
 </div>
+<script src="canvas.js"></script>
+
 </body>
 </html>
