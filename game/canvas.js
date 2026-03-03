@@ -674,7 +674,7 @@ function checkOrientation() {
     gameActive = false;
   } else {
     rotateOverlay.classList.add("hidden");
-    gameActive = true;
+    // DO NOT change gameActive here
   }
 }
 
