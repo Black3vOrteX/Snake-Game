@@ -528,6 +528,7 @@ function restartGame() {
 
   overlay.classList.remove("show");
   overlay.classList.add("hidden");
+  history.pushState(null, null, location.href);
 }
 
 restartBtn.addEventListener("click", restartGame);
@@ -593,7 +594,13 @@ addMobileControl(downBtn, { x: 0, y: 1 });
 addMobileControl(leftBtn, { x: -1, y: 0 });
 addMobileControl(rightBtn, { x: 1, y: 0 });
 
-
+// ================= BACK BUTTON HANDLER =================
+window.addEventListener("popstate", function () {
+  if (gameActive) {
+    showQuitOverlay();
+    history.pushState(null, null, location.href);
+  }
+});
 
 // ================= INTRO OVERLAY =================
 
@@ -656,3 +663,44 @@ function playIntro() {
 }
 
 playIntro();
+
+const rotateOverlay = document.getElementById("rotateOverlay");
+
+function checkOrientation() {
+  if (window.innerWidth > window.innerHeight) {
+    // Landscape
+    rotateOverlay.classList.remove("hidden");
+    gameActive = false;
+  } else {
+    // Portrait
+    rotateOverlay.classList.add("hidden");
+    gameActive = true;
+  }
+}
+
+window.addEventListener("resize", checkOrientation);
+checkOrientation();
+
+// =========== QUIT OVERLAY ===============
+
+const quitOverlay = document.getElementById("quitOverlay");
+const continueBtn = document.getElementById("continueBtn");
+const quitBtn = document.getElementById("quitBtn");
+
+function showQuitOverlay() {
+  quitOverlay.classList.remove("hidden");
+  gameActive = false;
+}
+
+function hideQuitOverlay() {
+  quitOverlay.classList.add("hidden");
+  gameActive = true;
+}
+
+continueBtn.addEventListener("click", () => {
+  hideQuitOverlay();
+});
+
+quitBtn.addEventListener("click", () => {
+  window.location.href = "Leaderboard.html";
+});
