@@ -171,6 +171,13 @@ button:hover {
   </form>
 
 </div>
+<script>
+  const form = document.querySelector("form");
 
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); // stop normal form navigation
+    window.location.replace("game/index.html");
+  });
+</script>
 </body>
 </html>

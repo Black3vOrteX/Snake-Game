@@ -1,3 +1,5 @@
+
+
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
 
@@ -27,7 +29,7 @@ startGameBtn.addEventListener("click", () => {
 overlay.classList.remove("show");
 overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
-history.pushState(null, null, location.href);
+
 
 // ================= RESPONSIVE SIZE =================
 
@@ -528,7 +530,8 @@ function restartGame() {
 
   velocity = { x: 0, y: 0 };
   gameStarted = false;
-  gameActive = window.innerWidth <= window.innerHeight;
+  gameActive = true;
+  
 
   resetSnake();
   placeFood();
@@ -684,10 +687,9 @@ function checkOrientation() {
 }
 
 function checkOrientation() {
-  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
 
-  
   if (!gameInitialized) return;
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
 
   if (isLandscape) {
     rotateOverlay.classList.remove("hidden");
@@ -734,12 +736,15 @@ continueBtn.addEventListener("click", () => {
 quitBtn.addEventListener("click", () => {
   window.location.href = "Leaderboard.html";
 });
-
-window.addEventListener("popstate", function () {
-  if (gameInitialized) {
-    showQuitOverlay();
-  }
-
-  // Always re-push so back button stays trapped
+// ============= BACK/QUIT OVERLAY =========//
+document.addEventListener("DOMContentLoaded", function () {
+  history.replaceState(null, null, location.href);
   history.pushState(null, null, location.href);
 });
+
+window.addEventListener("popstate", function () {
+  showQuitOverlay();
+  history.pushState(null, null, location.href);
+});
+
+  
