@@ -11,7 +11,7 @@ body {
         #111827 0%,
         #0b1120 60%,
         #05080f 100%);
-        min-height: 100dvh;
+        
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -491,4 +491,12 @@ canvas {
 @keyframes flicker {
   from { transform: scaleX(1); }
   to { transform: scaleX(1.5); }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100dvh;
+  touch-action: none;
 }
