@@ -10,8 +10,10 @@ const timeDisplay = document.querySelector(".time .value");
 
 const introOverlay = document.getElementById("tinguIntro");
 const startGameBtn = document.getElementById("startGameBtn");
+const rotateOverlay = document.getElementById("rotateOverlay");
+
 // Prevent immediate back navigation
-history.pushState(null, null, location.href);
+
 
 startGameBtn.addEventListener("click", () => {
   introOverlay.classList.add("hidden");   
@@ -19,13 +21,14 @@ startGameBtn.addEventListener("click", () => {
   restartGame();
 
   
-  history.pushState({ game: true }, null, location.href);
+  
 });
 
 overlay.classList.remove("show");
 overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
-
+history.pushState(null, null, location.href);
+history.pushState(null, null, location.href);
 // ================= RESPONSIVE SIZE =================
 
 let size;
@@ -532,7 +535,7 @@ function restartGame() {
 
   velocity = { x: 0, y: 0 };
   gameStarted = false;
-  gameActive = true;
+  gameActive = window.innerWidth <= window.innerHeight;
 
   resetSnake();
   placeFood();
@@ -541,7 +544,7 @@ function restartGame() {
 
   overlay.classList.remove("show");
   overlay.classList.add("hidden");
-  history.pushState(null, null, location.href);
+  
 }
 
 restartBtn.addEventListener("click", restartGame);
@@ -608,12 +611,7 @@ addMobileControl(leftBtn, { x: -1, y: 0 });
 addMobileControl(rightBtn, { x: 1, y: 0 });
 
 // ================= BACK BUTTON HANDLER =================
-window.addEventListener("popstate", function () {
-  if (gameActive) {
-    showQuitOverlay();
-    history.pushState(null, null, location.href);
-  }
-});
+
 
 // ================= INTRO OVERLAY =================
 
@@ -677,8 +675,6 @@ function playIntro() {
 
 playIntro();
 
-const rotateOverlay = document.getElementById("rotateOverlay");
-
 function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
 
@@ -688,12 +684,12 @@ function checkOrientation() {
   } else {
     rotateOverlay.classList.add("hidden");
 
-    // Only resume if game already started
-    if (gameInitialized) {
+    if (gameInitialized && !overlay.classList.contains("show")) {
       gameActive = true;
     }
   }
 }
+
 
 window.addEventListener("resize", checkOrientation);
 
@@ -701,8 +697,12 @@ if (screen.orientation) {
   screen.orientation.addEventListener("change", checkOrientation);
 }
 
-checkOrientation();
 
+window.addEventListener("load", () => {
+  requestAnimationFrame(() => {
+    checkOrientation();
+  });
+});
 
 
 // =========== QUIT OVERLAY ===============
@@ -732,6 +732,8 @@ quitBtn.addEventListener("click", () => {
 window.addEventListener("popstate", function () {
   if (gameInitialized) {
     showQuitOverlay();
-    history.pushState(null, null, location.href);
   }
+
+  // Always re-push so back button stays trapped
+  history.pushState(null, null, location.href);
 });

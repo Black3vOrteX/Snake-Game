@@ -282,17 +282,17 @@ canvas {
 }
 
 #rotateOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(5, 8, 15, 0.85);
-    display: none;              /* default hidden */
-    justify-content: center;
-    align-items: center;
-    background: black;
-    color: white;
-    z-index: 30;
-}
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: white;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;   /* 🔥 force it above everything */
+}
 
 .tingu-text {
     margin-top: 15px;
