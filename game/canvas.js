@@ -721,14 +721,15 @@ const quitBtn = document.getElementById("quitBtn");
 
 function showQuitOverlay() {
   quitOverlay.classList.remove("hidden");
+  quitOverlay.classList.add("show");
   gameActive = false;
 }
 
 function hideQuitOverlay() {
   quitOverlay.classList.add("hidden");
+  quitOverlay.classList.remove("show");
   gameActive = true;
 }
-
 continueBtn.addEventListener("click", () => {
   hideQuitOverlay();
 });
@@ -742,7 +743,14 @@ document.addEventListener("DOMContentLoaded", function () {
   history.pushState(null, null, location.href);
 });
 
+// =============  ARE YOU SURE YOU WANT TO QUIT OVERLAY =======//
+
+document.addEventListener("DOMContentLoaded", function () {
+  history.pushState(null, null, location.href);
+});
+
 window.addEventListener("popstate", function () {
+  console.log("BACK TRIGGERED");
   showQuitOverlay();
   history.pushState(null, null, location.href);
 });
