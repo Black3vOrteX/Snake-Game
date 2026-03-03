@@ -10,6 +10,8 @@ const timeDisplay = document.querySelector(".time .value");
 
 const introOverlay = document.getElementById("tinguIntro");
 const startGameBtn = document.getElementById("startGameBtn");
+// Prevent immediate back navigation
+history.pushState(null, null, location.href);
 startGameBtn.addEventListener("click", () => {
   introOverlay.style.display = "none";
   gameActive = true;
@@ -45,7 +47,7 @@ const SEGMENT_SPACING = 6;
 let score = 0;
 let timeLeft = SESSION_DURATION;
 
-let velocity = { x: 1, y: 0 };
+let velocity = { x: 0, y: 0 };
 let baseSpeed = 4.5;
 let currentSpeed = baseSpeed;
 
@@ -517,7 +519,7 @@ function restartGame() {
   timeLeft = SESSION_DURATION;
   timeDisplay.textContent = SESSION_DURATION.toString().padStart(2, "0");
 
-  velocity = { x: 1, y: 0 };
+  velocity = { x: 0, y: 0 };
   gameStarted = false;
   gameActive = true;
 
@@ -667,16 +669,19 @@ playIntro();
 const rotateOverlay = document.getElementById("rotateOverlay");
 
 function checkOrientation() {
-  if (window.innerWidth > window.innerHeight) {
-    // Landscape
+  if (window.matchMedia("(orientation: landscape)").matches) {
     rotateOverlay.classList.remove("hidden");
     gameActive = false;
   } else {
-    // Portrait
     rotateOverlay.classList.add("hidden");
     gameActive = true;
   }
 }
+
+window.addEventListener("orientationchange", checkOrientation);
+window.addEventListener("resize", checkOrientation);
+
+checkOrientation();
 
 window.addEventListener("resize", checkOrientation);
 checkOrientation();
