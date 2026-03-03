@@ -12,7 +12,12 @@ const introOverlay = document.getElementById("tinguIntro");
 const startGameBtn = document.getElementById("startGameBtn");
 startGameBtn.addEventListener("click", () => {
   introOverlay.style.display = "none";
+  gameActive = true;
+  restartGame(); 
 });
+
+overlay.classList.remove("show");
+overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
 
 // ================= RESPONSIVE SIZE =================
@@ -52,7 +57,7 @@ let foodColors = ["#ff4d4d", "#facc15", "#22c55e", "#3b82f6", "#a855f7"];
 let currentFoodColor = foodColors[0];
 
 let gameStarted = false;
-let gameActive = true;
+let gameActive = false;
 let timerInterval;
 
 let foodSpawnTime = Date.now();
@@ -293,14 +298,14 @@ function gameLoop() {
   snake.unshift(newHead);
 
   while (snake.length > targetLength * 6) snake.pop();
-
+// Wall collision
   if (
     newHead.x < 0 ||
     newHead.x > size ||
     newHead.y < 0 ||
     newHead.y > size
   ) {
-    gameOver("collision");
+    gameOver("wall");
     return;
   }
 
@@ -309,7 +314,7 @@ function gameLoop() {
     let dx = newHead.x - snake[i].x;
     let dy = newHead.y - snake[i].y;
     if (Math.sqrt(dx * dx + dy * dy) < 8) {
-      gameOver("collision");
+      gameOver("self");
       return;
     }
   }
@@ -358,39 +363,93 @@ function gameOver(reason) {
 
   document.getElementById("finalScore").textContent = score;
   document.getElementById("finalHighScore").textContent = highScore;
-  document.getElementById("tinguMessage").textContent = getTinguMessage(score);
+  document.getElementById("tinguMessage").textContent =
+    getTinguMessage(score, reason);
   overlay.classList.remove("hidden");
   overlay.classList.add("show");
 }
 
 // ================= TINGU ROAST =================
-function getTinguMessage(score) {
-  if (score === 0) {
-    return "Arey... start cheyyaledu kuda? Tingu disappointed ra.";
+let lastTinguMessage = "";
+
+function getTinguMessage(score, reason) {
+
+  const messages = {
+    zero: [
+      "Start cheyyaledu kuda… warm up ani cheppava?",
+      "0 aa? Even tutorial skip chesava?",
+      "Nuvvu aadava… leda vibe check ki vachava?"
+    ],
+
+    low: [
+      "Skill issue ra.",
+      "Confidence ekkuva… reflex slow.",
+      "Ila aadithe jungle lo internship kuda raadhu.",
+      "One more try antaava? Sarey chuddam."
+    ],
+
+    mid: [
+      "Okay okay… finally brain ON chesava?",
+      "Konchem improve ayyaav… I’ll allow it.",
+      "Not bad… but still beta version.",
+      "Heat lo unnav… but not lava level."
+    ],
+
+    good: [
+      "Ahh! Ippudu manchi form lo unnav.",
+      "Respect konchem perigindi.",
+      "Idhe maintain cheyyi… ego perigakunda.",
+      "Now we’re talking ra."
+    ],
+
+    insane: [
+      "Wah champion… ipudu nenu alert mode lo unna.",
+      "Dangerous player vibes.",
+      "Okay this was clean… I’m impressed.",
+      "Nuvvu practice chesthunnaav ani ardham avthundi."
+    ],
+
+    wall: [
+      "Wall ni blame chesthava ippudu?",
+      "Map fixed… problem nuvve.",
+      "Straight ga wall lo dive chesav ra."
+    ],
+
+    self: [
+      "Self sabotage ante idi.",
+      "Nuvve ninnu tinnesukunnaav.",
+      "Inner demons win ayyaru."
+    ]
+  };
+
+  function random(arr) {
+    let msg;
+    do {
+      msg = arr[Math.floor(Math.random() * arr.length)];
+    } while (msg === lastTinguMessage && arr.length > 1);
+
+    lastTinguMessage = msg;
+    return msg;
   }
 
-  if (score < 5) {
-    return "Ila aadithe streak kaadu, struggle antaru.";
+  // Rare chaotic line (5%)
+  if (Math.random() < 0.05) {
+    return "Nee confidence ki separate leaderboard create cheyyali ra.";
   }
 
-  if (score < 15) {
-    return "Sarey, konchem improve ayyaav... but still weak.";
-  }
+  if (reason === "wall") {
+  return random(messages.wall);
+}
 
-  if (score < 20) {
-    return "Okay okay… ippudu heat lo unnav.";
-  }
+if (reason === "self") {
+  return random(messages.self);
+}
 
-
-  if (score < 30) {
-    return "Okay okay… ippudu manchi form lo unnav.";
-  }
-
-  if (score < 35) {
-    return "Ahh! Ippudu naku respect vastundi.";
-  }
-
-  return "Wah champion! Ee level ante dangerous.";
+  if (score === 0) return random(messages.zero);
+  if (score < 5) return random(messages.low);
+  if (score < 15) return random(messages.mid);
+  if (score < 30) return random(messages.good);
+  return random(messages.insane);
 }
 // ================= RESTART =================
 

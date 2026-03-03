@@ -367,72 +367,76 @@ canvas {
 
 .tingu-snake {
   position: relative;
-  width: 80px;
-  height: 50px;
-  margin: 0 auto 20px auto;
+  width: 140px;
+  height: 80px;
+  margin: 0 auto 25px auto;
 
   opacity: 0;
-  transform: translateX(-150px);
+  transform: translateX(-200px);
 
   transition: transform 0.6s cubic-bezier(.68,-0.55,.27,1.55),
               opacity 0.4s ease;
 }
 
-/* Head shape */
-.tingu-snake::before {
-  content: "";
+/* Body curve */
+.tingu-body {
   position: absolute;
-  width: 80px;
+  width: 90px;
   height: 50px;
+  left: 0;
+  top: 20px;
+
+  background: linear-gradient(135deg, #0088ff, #0044ff);
+  border-radius: 50px;
+  filter: blur(2px);
+  opacity: 0.7;
+}
+
+/* Head */
+.tingu-head {
+  position: absolute;
+  width: 95px;
+  height: 70px;
+  left: 40px;
+  top: 5px;
 
   background: linear-gradient(135deg, #00f5ff, #0099ff);
-  border-radius: 50% 50% 40% 40%;
+
+  /* Slightly pointed front */
+  border-radius: 60% 70% 55% 55%;
 
   box-shadow:
-    0 0 20px #00f5ff,
-    0 0 40px #0099ff;
+    0 0 25px #00f5ff,
+    0 0 50px #0099ff;
 }
 
 /* Eyes */
-.tingu-snake::after {
-  content: "";
+.eye {
   position: absolute;
-  top: 18px;
-  left: 25px;
-  width: 10px;
-  height: 10px;
-
+  width: 8px;
+  height: 8px;
   background: black;
   border-radius: 50%;
-
-  box-shadow:
-    25px 0 black, /* second eye */
-    0 0 10px #00f5ff;
+  top: 32px;
+  z-index: 3;
 }
 
-.tingu-snake::after {
-  content: "";
+.eye.left { left: 85px; }
+.eye.right { left: 100px; }
+
+/* Tongue */
+.tongue {
   position: absolute;
-  top: 18px;
-  left: 25px;
-  width: 10px;
-  height: 10px;
-  background: black;
-  border-radius: 50%;
-  box-shadow: 25px 0 black;
+  width: 14px;
+  height: 3px;
+  background: #ff2e63;
+  left: 130px;
+  top: 42px;
+  border-radius: 3px;
+  animation: flicker 0.7s infinite alternate;
 }
 
-.tingu-snake .brow {
-  position: absolute;
-  top: 12px;
-  left: 20px;
-  width: 20px;
-  height: 4px;
-  background: black;
-  transform: rotate(-15deg);
-}
-
-@keyframes wiggle {
-  from { transform: translateX(0) rotate(-2deg); }
-  to { transform: translateX(0) rotate(2deg); }
+@keyframes flicker {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(1.5); }
 }
