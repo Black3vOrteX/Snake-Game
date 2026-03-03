@@ -1,4 +1,8 @@
+const params = new URLSearchParams(window.location.search);
+const username = params.get("username") || "Guest";
+window.playerName = username;
 
+console.log("Logged in as:", window.playerName);
 
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
@@ -29,7 +33,7 @@ startGameBtn.addEventListener("click", () => {
 overlay.classList.remove("show");
 overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
-
+history.pushState(null, null, location.href);
 
 // ================= RESPONSIVE SIZE =================
 
@@ -385,6 +389,38 @@ function gameOver(reason) {
     getTinguMessage(score, reason);
   overlay.classList.remove("hidden");
   overlay.classList.add("show");
+
+  sendScoreToLeaderboard(score);
+}
+
+
+// ================= Send score to leaderboard =================
+
+
+
+function sendScoreToLeaderboard(finalScore) {
+    if (scoreSent) return;
+    scoreSent = true;
+
+    console.log("Sending:", window.playerName, finalScore);
+
+    fetch("http://127.0.0.1:3000/save-score", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            username: window.playerName,
+            score: finalScore
+        })
+    })
+    .then(res => res.json())
+    .then(() => {
+        console.log("Score sent to leaderboard");
+    })
+    .catch(err => {
+        console.error("Leaderboard error:", err);
+    });
 }
 
 // ================= TINGU ROAST =================
@@ -518,6 +554,7 @@ function getTinguMessage(score, reason) {
 // ================= RESTART =================
 
 function restartGame() {
+  scoreSent = false;
   clearInterval(timerInterval);
   currentFoodColor = foodColors[0];
   score = 0;
@@ -530,8 +567,7 @@ function restartGame() {
 
   velocity = { x: 0, y: 0 };
   gameStarted = false;
-  gameActive = true;
-  
+  gameActive = window.innerWidth <= window.innerHeight;
 
   resetSnake();
   placeFood();
@@ -687,9 +723,10 @@ function checkOrientation() {
 }
 
 function checkOrientation() {
-
-  if (!gameInitialized) return;
   const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+
+  
+  if (!gameInitialized) return;
 
   if (isLandscape) {
     rotateOverlay.classList.remove("hidden");
@@ -736,15 +773,12 @@ continueBtn.addEventListener("click", () => {
 quitBtn.addEventListener("click", () => {
   window.location.href = "Leaderboard.html";
 });
-// ============= BACK/QUIT OVERLAY =========//
-document.addEventListener("DOMContentLoaded", function () {
-  history.replaceState(null, null, location.href);
-  history.pushState(null, null, location.href);
-});
 
 window.addEventListener("popstate", function () {
-  showQuitOverlay();
+  if (gameInitialized) {
+    showQuitOverlay();
+  }
+
+  // Always re-push so back button stays trapped
   history.pushState(null, null, location.href);
 });
-
-  

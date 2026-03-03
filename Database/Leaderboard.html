@@ -1,72 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<title>Leaderboard</title>
+
+<style>
+body {
+    background: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #111827;
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 🥇🥈🥉 Top 3 Styles */
+.first {
+    background: linear-gradient(45deg, gold, orange);
+    color: black;
+    font-weight: bold;
+}
+
+.second {
+    background: linear-gradient(45deg, silver, #ccc);
+    color: black;
+    font-weight: bold;
+}
+
+.third {
+    background: linear-gradient(45deg, #cd7f32, #b87333);
+    color: black;
+    font-weight: bold;
+}
+</style>
 </head>
+
 <body>
-    <caption>
-    <h1>Leaderboard</h1>
-    </caption>
-    <table>
-        <thead>
-        <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1st</td>
-            <td>abc</td>
-            <td>1500</td>
-        </tr>
-        <tr>
-            <td>2nd</td>
-            <td>def</td>
-            <td>1200</td>
-        </tr>
-        <tr>
-            <td>3rd</td>
-            <td>ghi</td>
-            <td>900</td>
-        </tr>
-        </tbody>
-    </table>
-    <!---<th>-table header,<td>-data inside the table-->
-    
 
+<div class="container">
+    <h2>🏆 Leaderboard</h2>
+    <ul id="list"></ul>
+</div>
 
+<script>
+fetch("http://127.0.0.1:3000/leaderboard")
+.then(res => res.json())
+.then(data => {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
 
+    data.forEach((player, index) => {
+        const li = document.createElement("li");
 
+        let medal = "";
+        if (index === 0) {
+            li.classList.add("first");
+            medal = "🥇";
+        } else if (index === 1) {
+            li.classList.add("second");
+            medal = "🥈";
+        } else if (index === 2) {
+            li.classList.add("third");
+            medal = "🥉";
+        }
 
+        li.innerHTML = `
+            <span>${medal} ${player.username}</span>
+            <span>${player.score}</span>
+        `;
 
+        list.appendChild(li);
+    });
+})
+.catch(err => {
+    console.error(err);
+});
+</script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 </body>
 </html>
