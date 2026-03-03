@@ -353,11 +353,40 @@ function gameOver(reason) {
 
   document.getElementById("finalScore").textContent = score;
   document.getElementById("finalHighScore").textContent = highScore;
-
+  document.getElementById("tinguMessage").textContent = getTinguMessage(score);
   overlay.classList.remove("hidden");
   overlay.classList.add("show");
 }
 
+// ================= TINGU ROAST =================
+function getTinguMessage(score) {
+  if (score === 0) {
+    return "Arey... start cheyyaledu kuda? Tingu disappointed ra.";
+  }
+
+  if (score < 5) {
+    return "Ila aadithe streak kaadu, struggle antaru.";
+  }
+
+  if (score < 15) {
+    return "Sarey, konchem improve ayyaav... but still weak.";
+  }
+
+  if (score < 20) {
+    return "Okay okay… ippudu heat lo unnav.";
+  }
+
+
+  if (score < 30) {
+    return "Okay okay… ippudu manchi form lo unnav.";
+  }
+
+  if (score < 35) {
+    return "Ahh! Ippudu naku respect vastundi.";
+  }
+
+  return "Wah champion! Ee level ante dangerous.";
+}
 // ================= RESTART =================
 
 function restartGame() {

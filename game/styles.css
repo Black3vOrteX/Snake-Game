@@ -297,3 +297,21 @@ canvas {
   align-items: center;
   z-index: 30;
 }
+
+.tingu-text {
+    margin-top: 15px;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    color: #00f5ff;
+
+    text-shadow:
+        0 0 6px #00f5ff,
+        0 0 16px #0099ff;
+
+    animation: fadeInTingu 0.4s ease-out;
+}
+
+@keyframes fadeInTingu {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
