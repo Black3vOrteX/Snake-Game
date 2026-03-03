@@ -680,22 +680,30 @@ playIntro();
 const rotateOverlay = document.getElementById("rotateOverlay");
 
 function checkOrientation() {
-  if (window.matchMedia("(orientation: landscape)").matches) {
+  const isLandscape = window.innerWidth > window.innerHeight;
+
+  if (isLandscape) {
     rotateOverlay.classList.remove("hidden");
     gameActive = false;
   } else {
     rotateOverlay.classList.add("hidden");
-    // DO NOT change gameActive here
+
+    // Only resume if game already started
+    if (gameInitialized) {
+      gameActive = true;
+    }
   }
 }
 
-window.addEventListener("orientationchange", checkOrientation);
 window.addEventListener("resize", checkOrientation);
+
+if (screen.orientation) {
+  screen.orientation.addEventListener("change", checkOrientation);
+}
 
 checkOrientation();
 
-window.addEventListener("resize", checkOrientation);
-checkOrientation();
+
 
 // =========== QUIT OVERLAY ===============
 
