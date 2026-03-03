@@ -315,3 +315,124 @@ canvas {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.intro-content {
+  text-align: center;
+  max-width: 320px;
+  color: #00f5ff;
+  text-shadow: 0 0 10px #00f5ff;
+}
+
+.intro-content h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.intro-text {
+  line-height: 1.6;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+#startGameBtn {
+  padding: 10px 24px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+
+  background: #00f5ff;
+  color: black;
+  font-weight: bold;
+
+  box-shadow:
+    0 0 15px #00f5ff,
+    0 0 30px #0099ff;
+
+  transition: transform 0.2s ease;
+}
+
+#startGameBtn:hover {
+  transform: scale(1.08);
+}
+
+.tingu-snake {
+  position: relative;
+  width: 80px;
+  height: 50px;
+  margin: 0 auto 20px auto;
+
+  opacity: 0;
+  transform: translateX(-150px);
+
+  transition: transform 0.6s cubic-bezier(.68,-0.55,.27,1.55),
+              opacity 0.4s ease;
+}
+
+/* Head shape */
+.tingu-snake::before {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 50px;
+
+  background: linear-gradient(135deg, #00f5ff, #0099ff);
+  border-radius: 50% 50% 40% 40%;
+
+  box-shadow:
+    0 0 20px #00f5ff,
+    0 0 40px #0099ff;
+}
+
+/* Eyes */
+.tingu-snake::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 25px;
+  width: 10px;
+  height: 10px;
+
+  background: black;
+  border-radius: 50%;
+
+  box-shadow:
+    25px 0 black, /* second eye */
+    0 0 10px #00f5ff;
+}
+
+.tingu-snake::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 25px;
+  width: 10px;
+  height: 10px;
+  background: black;
+  border-radius: 50%;
+  box-shadow: 25px 0 black;
+}
+
+.tingu-snake .brow {
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  width: 20px;
+  height: 4px;
+  background: black;
+  transform: rotate(-15deg);
+}
+
+@keyframes wiggle {
+  from { transform: translateX(0) rotate(-2deg); }
+  to { transform: translateX(0) rotate(2deg); }
+}

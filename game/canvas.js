@@ -8,6 +8,11 @@ const overlayTitle = document.getElementById("overlayTitle");
 const scoreIs = document.querySelector(".score .value");
 const timeDisplay = document.querySelector(".time .value");
 
+const introOverlay = document.getElementById("tinguIntro");
+const startGameBtn = document.getElementById("startGameBtn");
+startGameBtn.addEventListener("click", () => {
+  introOverlay.style.display = "none";
+});
 const SESSION_DURATION = 80;
 
 // ================= RESPONSIVE SIZE =================
@@ -476,3 +481,66 @@ addMobileControl(downBtn, { x: 0, y: 1 });
 addMobileControl(leftBtn, { x: -1, y: 0 });
 addMobileControl(rightBtn, { x: 1, y: 0 });
 
+
+
+// ================= INTRO OVERLAY =================
+
+const introLines = [
+  "hi",
+  "nenu tingu",
+  "naku akali ekkuvoy",
+  "naku ekkuva gudlu pettali",
+  "lekapote…",
+  "vacche nagulachavithiki chusukundam."
+];
+
+const tinguText = document.getElementById("tinguText");
+const tinguSnake = document.getElementById("tinguSnake");
+
+function playIntro() {
+  tinguText.innerHTML = "";
+  startGameBtn.style.opacity = "0";
+  tinguSnake.style.opacity = "0";
+  tinguSnake.style.transform = "translateX(-150px)";
+
+  let lineIndex = 0;
+
+  function typeCurrentLine() {
+    if (lineIndex >= introLines.length) {
+      startGameBtn.style.opacity = "1";
+      return;
+    }
+
+    let text = introLines[lineIndex];
+    let charIndex = 0;
+
+    function typeChar() {
+      if (charIndex < text.length) {
+        tinguText.innerHTML += text[charIndex];
+        charIndex++;
+        setTimeout(typeChar, 40);
+      } else {
+        tinguText.innerHTML += "<br>";
+
+        if (text === "nenu tingu") {
+          tinguSnake.style.opacity = "1";
+          tinguSnake.style.transform = "translateX(0)";
+
+          setTimeout(() => {
+            tinguSnake.style.animation =
+              "wiggle 1s ease-in-out infinite alternate";
+          }, 600);
+        }
+
+        lineIndex++;
+        setTimeout(typeCurrentLine, 400);
+      }
+    }
+
+    typeChar();
+  }
+
+  typeCurrentLine();
+}
+
+playIntro();
