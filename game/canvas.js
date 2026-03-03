@@ -12,10 +12,11 @@ const introOverlay = document.getElementById("tinguIntro");
 const startGameBtn = document.getElementById("startGameBtn");
 // Prevent immediate back navigation
 history.pushState(null, null, location.href);
+
 startGameBtn.addEventListener("click", () => {
   introOverlay.style.display = "none";
-  gameActive = true;
-  restartGame(); 
+  gameInitialized = true;
+  restartGame();
 });
 
 overlay.classList.remove("show");
@@ -25,6 +26,7 @@ const SESSION_DURATION = 80;
 // ================= RESPONSIVE SIZE =================
 
 let size;
+let gameInitialized = false;
 
 function resizeCanvas() {
   const wrapper = document.querySelector(".canvas-wrapper");
@@ -545,7 +547,7 @@ const interval = 1000 / fps;
 
 function animate(time) {
   if (time - lastTime > interval) {
-    if (gameActive) {
+    if (gameActive && gameInitialized) {
       gameLoop();
     }
     lastTime = time;
