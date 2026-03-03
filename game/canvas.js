@@ -28,7 +28,7 @@ overlay.classList.remove("show");
 overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
 history.pushState(null, null, location.href);
-history.pushState(null, null, location.href);
+
 // ================= RESPONSIVE SIZE =================
 
 let size;
@@ -489,16 +489,9 @@ function getTinguMessage(score, reason) {
 
   let result = "";
 
-  // 2 TIME
-  if (reason === "time") {
-    result += random(messages.time) + " ";
+  
 
-    if (score >= 25) {
-      result += "Almost legendary. So close ra.";
-    }
-  }
-
-  // 3 WALL
+  
   if (reason === "wall") {
   if (score < 5) return random(messages.wallLow);
   if (score < 15) return random(messages.wallMid);
@@ -676,7 +669,7 @@ function playIntro() {
 playIntro();
 
 function checkOrientation() {
-  const isLandscape = window.innerWidth > window.innerHeight;
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
 
   if (isLandscape) {
     rotateOverlay.classList.remove("hidden");
@@ -690,6 +683,23 @@ function checkOrientation() {
   }
 }
 
+function checkOrientation() {
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+
+  
+  if (!gameInitialized) return;
+
+  if (isLandscape) {
+    rotateOverlay.classList.remove("hidden");
+    gameActive = false;
+  } else {
+    rotateOverlay.classList.add("hidden");
+
+    if (!overlay.classList.contains("show")) {
+      gameActive = true;
+    }
+  }
+}
 
 window.addEventListener("resize", checkOrientation);
 
@@ -698,11 +708,7 @@ if (screen.orientation) {
 }
 
 
-window.addEventListener("load", () => {
-  requestAnimationFrame(() => {
-    checkOrientation();
-  });
-});
+
 
 
 // =========== QUIT OVERLAY ===============
