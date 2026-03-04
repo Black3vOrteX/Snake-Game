@@ -1,5 +1,3 @@
-
-
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
 
