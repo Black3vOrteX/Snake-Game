@@ -11,7 +11,7 @@ body {
         #111827 0%,
         #0b1120 60%,
         #05080f 100%);
-        min-height: 100dvh;
+        
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -155,6 +155,62 @@ canvas {
     z-index: 10;
 }
 
+.overlay-btn {
+  padding: 12px 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+}
+
+.continue-btn {
+  background: linear-gradient(135deg, #5eead4, #00cc88);
+  color: #003c2f;
+  box-shadow: 0 0 12px rgba(94, 234, 212, 0.6);
+}
+
+.continue-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(94, 234, 212, 0.9);
+}
+
+.continue-btn:active {
+  transform: scale(0.95);
+}
+
+.quit-btn {
+  background: rgba(255, 77, 77, 0.15);
+  color: #ff4d4d;
+  border: 1px solid #ff4d4d;
+}
+
+.quit-btn:hover {
+  background: rgba(255, 77, 77, 0.3);
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+}
+
+.quit-btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 8px rgba(94, 234, 212, 0.5); }
+  50% { box-shadow: 0 0 18px rgba(94, 234, 212, 0.9); }
+  100% { box-shadow: 0 0 8px rgba(94, 234, 212, 0.5); }
+}
+
+.continue-btn {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 20px;
+}
 
 .overlay-content {
   text-align: center;
@@ -435,4 +491,12 @@ canvas {
 @keyframes flicker {
   from { transform: scaleX(1); }
   to { transform: scaleX(1.5); }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100dvh;
+  touch-action: none;
 }
