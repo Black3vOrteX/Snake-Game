@@ -498,5 +498,5 @@ html, body {
   padding: 0;
  
   height: 100dvh;
-  
+  touch-action: none;
 }
