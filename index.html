@@ -169,7 +169,7 @@ button:hover {
 
   <form action="game/index.html" method="get">
     <div class="input-box">
-      <input type="text" placeholder="Username" required>
+      <input type="text" name="username" placeholder="Username" required>
     </div>
 
     <button type="submit">Start Game</button>
@@ -180,9 +180,14 @@ button:hover {
   const form = document.querySelector("form");
 
   form.addEventListener("submit", function (e) {
-    e.preventDefault(); // stop normal form navigation
-    window.location.replace("game/index.html");
+    e.preventDefault();
+
+    const username = document.querySelector("input[name='username']").value;
+
+    window.location.href = "game/index.html?username=" + encodeURIComponent(username);
+
   });
 </script>
 </body>
 </html>
+
