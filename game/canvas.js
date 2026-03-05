@@ -33,7 +33,7 @@ startGameBtn.addEventListener("click", () => {
 overlay.classList.remove("show");
 overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
-history.pushState(null, null, location.href);
+
 
 // ================= RESPONSIVE SIZE =================
 
@@ -600,7 +600,7 @@ document.getElementById("gameOverQuitBtn").addEventListener("click", () => {
 
   setTimeout(() => {
     window.location.href = "../thankyou.html";
-  }, 400);
+  }, 150);
 });
 //document.getElementById("quitBtn").addEventListener("click", () => {
 //  window.location.href = "../thankyou.html";
@@ -653,12 +653,10 @@ function handleDirection(newVelocity) {
 
 function addMobileControl(button, direction) {
   if (!button) return;
-
   button.addEventListener("touchstart", (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     handleDirection(direction);
-  });
-
+  }, { passive: true });  // ← change to passive(blocking scroll): true, remove e.preventDefault()
   button.addEventListener("click", () => {
     handleDirection(direction);
   });
@@ -792,7 +790,7 @@ quitBtn.addEventListener("click", () => {
 
   setTimeout(() => {
     window.location.href = "../thankyou.html";
-  }, 400);
+  }, 150);
 });
 
 function showQuitOverlay() {
@@ -814,21 +812,16 @@ continueBtn.addEventListener("click", () => {
 
 // =============  ARE YOU SURE YOU WANT TO QUIT OVERLAY =======//
 
-document.addEventListener("DOMContentLoaded", function () {
-  history.pushState(null, null, location.href);
-});
+
 
 window.addEventListener("popstate", function () {
 
   if (gameInitialized) {
     showQuitOverlay();
   }
-
-  console.log("BACK TRIGGERED");
-  showQuitOverlay();
   history.pushState(null, null, location.href);
 });
 
-  // Always re-push so back button stays trapped
-  history.pushState(null, null, location.href);
+  
+  
 ;
