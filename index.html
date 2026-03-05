@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Game Login</title>
 <style>
 body {
   margin: 0;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -17,6 +17,11 @@ body {
       #111827 0%,
       #0b1120 60%,
       #05080f 100%);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
 }
 
 /* ===== Floating Neon Bubbles ===== */
@@ -164,13 +169,25 @@ button:hover {
 
   <form action="game/index.html" method="get">
     <div class="input-box">
-      <input type="text" placeholder="Username" required>
+      <input type="text" name="username" placeholder="Username" required>
     </div>
 
     <button type="submit">Start Game</button>
   </form>
 
 </div>
+<script>
+  const form = document.querySelector("form");
 
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const username = document.querySelector("input[name='username']").value;
+
+    window.location.href = "game/index.html?username=" + encodeURIComponent(username);
+
+  });
+</script>
 </body>
 </html>
+

@@ -1,3 +1,9 @@
+
+const params = new URLSearchParams(window.location.search);
+const username = params.get("username") || "Guest";
+window.playerName = username;
+
+console.log("Logged in as:", window.playerName);
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
 
@@ -10,19 +16,29 @@ const timeDisplay = document.querySelector(".time .value");
 
 const introOverlay = document.getElementById("tinguIntro");
 const startGameBtn = document.getElementById("startGameBtn");
+const rotateOverlay = document.getElementById("rotateOverlay");
+
+// Prevent immediate back navigation
+
+
 startGameBtn.addEventListener("click", () => {
-  introOverlay.style.display = "none";
-  gameActive = true;
-  restartGame(); 
+  introOverlay.classList.add("hidden");   
+  gameInitialized = true;
+  restartGame();
+
+  
+  
 });
 
 overlay.classList.remove("show");
 overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
+history.pushState(null, null, location.href);
 
 // ================= RESPONSIVE SIZE =================
 
 let size;
+let gameInitialized = false;
 
 function resizeCanvas() {
   const wrapper = document.querySelector(".canvas-wrapper");
@@ -34,7 +50,7 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", () => {
   resizeCanvas();
-  restartGame();
+  
 });
 
 // ================= GAME SETTINGS =================
@@ -45,7 +61,7 @@ const SEGMENT_SPACING = 6;
 let score = 0;
 let timeLeft = SESSION_DURATION;
 
-let velocity = { x: 1, y: 0 };
+let velocity = { x: 0, y: 0 };
 let baseSpeed = 4.5;
 let currentSpeed = baseSpeed;
 
@@ -289,6 +305,12 @@ function gameLoop() {
 
   c.clearRect(0, 0, size, size);
 
+  if (velocity.x === 0 && velocity.y === 0) {
+    drawFood();
+    drawSnake();
+    return;
+  }
+
   let head = snake[0];
   let newHead = {
     x: head.x + velocity.x * currentSpeed,
@@ -379,6 +401,38 @@ localStorage.setItem(
     getTinguMessage(score, reason);
   overlay.classList.remove("hidden");
   overlay.classList.add("show");
+
+  sendScoreToLeaderboard(score);
+}
+
+
+// ================= Send score to leaderboard =================
+
+
+
+function sendScoreToLeaderboard(finalScore) {
+    if (scoreSent) return;
+    scoreSent = true;
+
+    console.log("Sending:", window.playerName, finalScore);
+
+    fetch("http://127.0.0.1:3000/save-score", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            username: window.playerName,
+            score: finalScore
+        })
+    })
+    .then(res => res.json())
+    .then(() => {
+        console.log("Score sent to leaderboard");
+    })
+    .catch(err => {
+        console.error("Leaderboard error:", err);
+    });
 }
 
 // ================= TINGU ROAST =================
@@ -387,51 +441,84 @@ let lastTinguMessage = "";
 function getTinguMessage(score, reason) {
 
   const messages = {
-    zero: [
-      "Start cheyyaledu kuda… warm up ani cheppava?",
-      "0 aa? Even tutorial skip chesava?",
-      "Nuvvu aadava… leda vibe check ki vachava?"
-    ],
-
-    low: [
-      "Skill issue ra.",
-      "Confidence ekkuva… reflex slow.",
-      "Ila aadithe jungle lo internship kuda raadhu.",
-      "One more try antaava? Sarey chuddam."
-    ],
-
-    mid: [
-      "Okay okay… finally brain ON chesava?",
-      "Konchem improve ayyaav… I’ll allow it.",
-      "Not bad… but still beta version.",
-      "Heat lo unnav… but not lava level."
-    ],
-
-    good: [
-      "Ahh! Ippudu manchi form lo unnav.",
-      "Respect konchem perigindi.",
-      "Idhe maintain cheyyi… ego perigakunda.",
-      "Now we’re talking ra."
-    ],
-
-    insane: [
-      "Wah champion… ipudu nenu alert mode lo unna.",
-      "Dangerous player vibes.",
-      "Okay this was clean… I’m impressed.",
-      "Nuvvu practice chesthunnaav ani ardham avthundi."
-    ],
-
-    wall: [
-      "Wall ni blame chesthava ippudu?",
-      "Map fixed… problem nuvve.",
-      "Straight ga wall lo dive chesav ra."
-    ],
-
     self: [
       "Self sabotage ante idi.",
       "Nuvve ninnu tinnesukunnaav.",
-      "Inner demons win ayyaru."
-    ]
+      "Brain lag ayyindha?",
+      "Nuvve ninnu out cheskunnaav."
+    ],
+
+    wallLow: [
+    "Wall ni blame chesthava ippudu? Skill issue ra.",
+    "Start chesi direct crash aa? Warm up ekkada?",
+    "Straight ga wall lo dive chesav… impressive stupidity."
+  ],
+
+  wallMid: [
+    "Crash ayyaav… at least score konchem undi.",
+    "Wall akkade undi… but okay, minor progress.",
+    "Reflex slow kaadu… judgement slow."
+  ],
+
+  wallGood: [
+    "Mid-run lo crash ayyaav… pressure handle cheyyaledu.",
+    "Decent flow… but control slip ayyindi.",
+    "Konchem focus unte save ayyedhi."
+  ],
+
+  wallHigh: [
+    "Strong run… last lo wall tho friendship.",
+    "Solid performance… unfortunate ending.",
+    "Wall tho close interaction unnecessary."
+  ],
+
+  wallElite: [
+    "Almost master level… but tiny mistake.",
+    "Legend run almost… but wall said no.",
+    "That hurt. Even I felt that crash."
+  ],
+
+  wallGod: [
+    "60 reach chesi wall? Tragic hero.",
+    "That was championship level until that crash.",
+    "Almost history create chesav… wall interrupt chesindi."
+  ],
+
+    timeLow: [
+    "80 seconds lo idi aa result?",
+    "Neeku evi vaddule.. poye chaduvuko",
+    "Time expired before effort started."
+  ],
+
+  timeMid: [
+    "Pressure lo slip ayyaav.",
+    "Time tho race close ga undi.",
+    "Last stretch lo stamina drop."
+  ],
+
+  timeGood: [
+    "Good run… but seconds betrayed you.",
+    "Strong pace… but time ruthless.",
+    "Almost rhythm perfect."
+  ],
+
+  timeHigh: [
+    "That was dramatic.",
+    "Clock ni almost dominate chesav.",
+    "This was cinematic."
+  ],
+
+  timeElite: [
+    "Almost legendary timing.",
+    "One more second unte history.",
+    "That ending felt illegal."
+  ],
+
+  timeGod: [
+    "Time itself struggled to stop you.",
+    "This was elite gameplay.",
+    "I’m officially impressed."
+  ]
   };
 
   function random(arr) {
@@ -441,31 +528,45 @@ function getTinguMessage(score, reason) {
     } while (msg === lastTinguMessage && arr.length > 1);
 
     lastTinguMessage = msg;
+    
     return msg;
   }
 
-  // Rare chaotic line (5%)
-  if (Math.random() < 0.05) {
-    return "Nee confidence ki separate leaderboard create cheyyali ra.";
+  //  SELF 
+  if (reason === "self") {
+    return random(messages.self);
   }
 
+  let result = "";
+
+  
+
+  
   if (reason === "wall") {
-  return random(messages.wall);
+  if (score < 5) return random(messages.wallLow);
+  if (score < 15) return random(messages.wallMid);
+  if (score < 30) return random(messages.wallGood);
+  if (score < 45) return random(messages.wallHigh);
+  if (score < 60) return random(messages.wallElite);
+  return random(messages.wallGod);
 }
 
-if (reason === "self") {
-  return random(messages.self);
+ 
+  if (reason === "time") {
+  if (score < 5) return random(messages.timeLow);
+  if (score < 15) return random(messages.timeMid);
+  if (score < 30) return random(messages.timeGood);
+  if (score < 45) return random(messages.timeHigh);
+  if (score < 60) return random(messages.timeElite);
+  return random(messages.timeGod);
 }
 
-  if (score === 0) return random(messages.zero);
-  if (score < 5) return random(messages.low);
-  if (score < 15) return random(messages.mid);
-  if (score < 30) return random(messages.good);
-  return random(messages.insane);
+  return result.trim();
 }
 // ================= RESTART =================
 
 function restartGame() {
+  scoreSent = false;
   clearInterval(timerInterval);
   currentFoodColor = foodColors[0];
   score = 0;
@@ -476,9 +577,9 @@ function restartGame() {
   timeLeft = SESSION_DURATION;
   timeDisplay.textContent = SESSION_DURATION.toString().padStart(2, "0");
 
-  velocity = { x: 1, y: 0 };
+  velocity = { x: 0, y: 0 };
   gameStarted = false;
-  gameActive = true;
+  gameActive = window.innerWidth <= window.innerHeight;
 
   resetSnake();
   placeFood();
@@ -487,6 +588,7 @@ function restartGame() {
 
   overlay.classList.remove("show");
   overlay.classList.add("hidden");
+  
 }
 
 restartBtn.addEventListener("click", restartGame);
@@ -510,7 +612,7 @@ const interval = 1000 / fps;
 
 function animate(time) {
   if (time - lastTime > interval) {
-    if (gameActive) {
+    if (gameActive && gameInitialized) {
       gameLoop();
     }
     lastTime = time;
@@ -561,6 +663,7 @@ addMobileControl(downBtn, { x: 0, y: 1 });
 addMobileControl(leftBtn, { x: -1, y: 0 });
 addMobileControl(rightBtn, { x: 1, y: 0 });
 
+// ================= BACK BUTTON HANDLER =================
 
 
 // ================= INTRO OVERLAY =================
@@ -624,3 +727,92 @@ function playIntro() {
 }
 
 playIntro();
+
+function checkOrientation() {
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+
+  if (isLandscape) {
+    rotateOverlay.classList.remove("hidden");
+    gameActive = false;
+  } else {
+    rotateOverlay.classList.add("hidden");
+
+    if (gameInitialized && !overlay.classList.contains("show")) {
+      gameActive = true;
+    }
+  }
+}
+
+function checkOrientation() {
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+
+  
+  if (!gameInitialized) return;
+
+  if (isLandscape) {
+    rotateOverlay.classList.remove("hidden");
+    gameActive = false;
+  } else {
+    rotateOverlay.classList.add("hidden");
+
+    if (!overlay.classList.contains("show")) {
+      gameActive = true;
+    }
+  }
+}
+
+window.addEventListener("resize", checkOrientation);
+
+if (screen.orientation) {
+  screen.orientation.addEventListener("change", checkOrientation);
+}
+
+
+
+
+
+// =========== QUIT OVERLAY ===============
+
+const quitOverlay = document.getElementById("quitOverlay");
+const continueBtn = document.getElementById("continueBtn");
+const quitBtn = document.getElementById("quitBtn");
+
+function showQuitOverlay() {
+  quitOverlay.classList.remove("hidden");
+  quitOverlay.classList.add("show");
+  gameActive = false;
+}
+
+function hideQuitOverlay() {
+  quitOverlay.classList.add("hidden");
+  quitOverlay.classList.remove("show");
+  gameActive = true;
+}
+continueBtn.addEventListener("click", () => {
+  hideQuitOverlay();
+});
+
+quitBtn.addEventListener("click", () => {
+  window.location.href = "Leaderboard.html";
+});
+
+// =============  ARE YOU SURE YOU WANT TO QUIT OVERLAY =======//
+
+document.addEventListener("DOMContentLoaded", function () {
+  history.pushState(null, null, location.href);
+});
+
+window.addEventListener("popstate", function () {
+
+  if (gameInitialized) {
+    showQuitOverlay();
+  }
+
+  console.log("BACK TRIGGERED");
+  showQuitOverlay();
+  history.pushState(null, null, location.href);
+});
+
+  // Always re-push so back button stays trapped
+  history.pushState(null, null, location.href);
+;

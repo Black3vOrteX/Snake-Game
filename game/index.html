@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>SNAKE GAME</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -40,6 +40,8 @@
   </div>
 </div>
 <div class="canvas-wrapper">
+
+    <!-- GAME OVER -->
     <div id="gameOverOverlay" class="hidden">
         <div class="overlay-content">
             <h2 id="overlayTitle">Game Over</h2>
@@ -52,7 +54,7 @@
                 High Score: <span id="finalHighScore">0</span>
             </p>
 
-<p id="tinguMessage" class="tingu-text"></p>
+            <p id="tinguMessage" class="tingu-text"></p>
 
             <div class="button-group">
   <button id="restartBtn" class="overlay-btn continue-btn">
@@ -64,6 +66,7 @@
   </button>
 </div>
         </div>
+<<<<<<< HEAD
         <div id="quitOverlay" class="hidden">
             <div class="overlay-content">
                 <h2>Quit Game?</h2>
@@ -74,10 +77,27 @@
             <button id="quitBtn" class="overlay-btn quit-btn">Quit</button>
     </div>
 </div>
+=======
+    </div> 
+
+    
+    <div id="quitOverlay" class="hidden">
+        <div class="overlay-content">
+            <h2>Quit Game?</h2>
+            <p class="overlay-score">
+                All progress will be lost.
+            </p>
+            <div class="button-group">
+            <button id="continueBtn" class="overlay-btn continue-btn">Continue</button>
+            <button id="quitBtn" class="overlay-btn quit-btn">Quit</button>
+        </div>
+        </div>
+>>>>>>> main
     </div>
 
     <canvas id="bgCanvas"></canvas>
     <canvas id="gameCanvas"></canvas>
+
 </div>
 
 <div class="controls">
@@ -88,8 +108,6 @@
         <button id="downBtn" class="dpad-btn down">▼</button>
     </div>
 </div>
-
-<script src="canvas.js"></script>
 <div id="rotateOverlay" class="hidden">
     
   <div class="overlay-content">
@@ -99,5 +117,7 @@
     </p>
   </div>
 </div>
+<script src="canvas.js"></script>
+
 </body>
 </html>
