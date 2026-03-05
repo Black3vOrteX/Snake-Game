@@ -165,18 +165,26 @@ canvas {
   transition: all 0.25s ease;
 }
 
-.continue-btn {
+#continueBtn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
   background: linear-gradient(135deg, #5eead4, #00cc88);
   color: #003c2f;
   box-shadow: 0 0 12px rgba(94, 234, 212, 0.6);
+  animation: pulseGlow 2s infinite ease-in-out;
+  transition: all 0.25s ease;
 }
 
-.continue-btn:hover {
+#continueBtn:hover {
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(94, 234, 212, 0.9);
 }
 
-.continue-btn:active {
+#continueBtn:active {
   transform: scale(0.95);
 }
 
@@ -514,7 +522,7 @@ html, body {
   padding: 0;
  
   height: 100dvh;
-  touch-action: none;
+  touch-action: pan-y;
 
 }
 
