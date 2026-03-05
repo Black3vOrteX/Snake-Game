@@ -30,11 +30,12 @@
       align-items: center;
     }
 
-    /* Ambient background */
+    /*  background */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
+      user-select: none;
       background:
         radial-gradient(ellipse at 20% 50%, rgba(0,245,255,0.04) 0%, transparent 60%),
         radial-gradient(ellipse at 80% 20%, rgba(94,234,212,0.05) 0%, transparent 50%),
@@ -43,7 +44,7 @@
       z-index: 0;
     }
 
-    /* Scanline overlay */
+    /*  overlay */
     body::after {
       content: '';
       position: fixed;
@@ -152,7 +153,7 @@
       to   { transform: rotate(4deg) translateY(-4px); }
     }
 
-    /* Typewriter message */
+    /*  message */
     .tingu-message {
       font-family: 'Share Tech Mono', monospace;
       font-size: 15px;
@@ -253,7 +254,7 @@
       border: 1px solid;
     }
 
-    /* Sign off */
+    /* bye */
     .signoff {
       font-family: 'Share Tech Mono', monospace;
       font-size: 12px;
@@ -313,13 +314,13 @@
   const highScore  = Number(localStorage.getItem("snakeHighScore"))    || 0;
   const games      = Number(localStorage.getItem("snakeGamesPlayed"))  || 0;
   const roasts     = Number(localStorage.getItem("snakeRoastCount"))   || 0;
-
+  
   document.getElementById("statScore").textContent  = score;
   document.getElementById("statHigh").textContent   = highScore;
   document.getElementById("statGames").textContent  = games;
   document.getElementById("statRoasts").textContent = roasts;
 
-  // Tier badge based on high score
+  // Tier badge based on  score
   function getTier(s) {
     if (s >= 60) return { label: "LEGEND TIER",   color: "#facc15", bg: "rgba(250,204,21,0.1)" };
     if (s >= 45) return { label: "ELITE TIER",    color: "#a855f7", bg: "rgba(168,85,247,0.1)" };
@@ -329,7 +330,7 @@
     return              { label: "TINGU BAIT",    color: "#ff4d4d", bg: "rgba(255,77,77,0.1)"  };
   }
 
-  const tier = getTier(highScore);
+  const tier = getTier(score);
   const badge = document.getElementById("tierBadge");
   badge.textContent = tier.label;
   badge.style.color = tier.color;
@@ -337,14 +338,14 @@
   badge.style.background = tier.bg;
   badge.style.boxShadow = `0 0 10px ${tier.color}44`;
 
-  // Goodbye messages by tier
+  // bye messages by tier
   const goodbyeLines = {
     god:   ["60 reach chesav.", "tingu ki namaskaaram.", "vacche sari intha easy undadu."],
     elite: ["solid run.", "45 daatav… respect undi.", "tingu approve chesadu."],
     high:  ["30 cross chesav, not bad.", "tingu ni impress chesav konchem.", "next time inka better cheseyyi."],
-    mid:   ["15 daakaav… okay.", "practice chesthe improve avutundi.", "tingu chustunnadu."],
-    low:   ["5 daakaav at least.", "tingu naaku hairaana ga undi.", "try again cheyyi… please."],
-    bad:   ["...idi aa?", "tingu embarrassed ga feel avutunnadu.", "neenu tingu ni disappoint chesav."]
+    mid:   ["15 daataav… okay.", "practice chesthe improve avutundi.", "tingu chustunnadu."],
+    low:   ["5 daataav at least.", "Idhi practice run anukunta…", "try again cheyyi… please."],
+    bad:   ["...inte na?", "tingu embarrassed ga feel avutunnadu.", "nuvvu tingu ni disappoint chesav."]
   };
 
   function pickLine(lines) {
@@ -352,11 +353,11 @@
   }
 
   let lines;
-  if (highScore >= 60)     lines = goodbyeLines.god;
-  else if (highScore >= 45) lines = goodbyeLines.elite;
-  else if (highScore >= 30) lines = goodbyeLines.high;
-  else if (highScore >= 15) lines = goodbyeLines.mid;
-  else if (highScore >= 5)  lines = goodbyeLines.low;
+  if (score >= 60)     lines = goodbyeLines.god;
+  else if (score >= 45) lines = goodbyeLines.elite;
+  else if (score >= 30) lines = goodbyeLines.high;
+  else if (score >= 15) lines = goodbyeLines.mid;
+  else if (score >= 5)  lines = goodbyeLines.low;
   else                      lines = goodbyeLines.bad;
 
   const farewell = pickLine(lines);
@@ -365,7 +366,7 @@
   const snake = document.getElementById("tinguSnake");
   setTimeout(() => snake.classList.add("visible"), 300);
 
-  // Typewriter
+  
   const msgEl = document.getElementById("tinguMsg");
   function typeMessage(text, onDone) {
     msgEl.innerHTML = "";
@@ -386,8 +387,8 @@
     }, 45);
   }
 
-  // Sequence: type two lines, then show stats
-  const line1 = "thanks for playing.";
+  const username = localStorage.getItem("snakeUsername") || "player";
+  const line1 = "thanks for playing, "+username+".";
   typeMessage(line1, () => {
     setTimeout(() => {
       typeMessage(farewell, () => {

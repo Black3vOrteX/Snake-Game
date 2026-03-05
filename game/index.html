@@ -1,106 +1,92 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>SNAKE GAME</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>SNAKE GAME</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
 <div id="header">
-    <div class="score">
-        <span class="label">Score:</span>
-        <span class="value">0</span>
-    </div>
-
-    <div class="title">
-        <h1>SNAKE GAME</h1>
-    </div>
-
-    <div class="time">
-        <span class="label">Time:</span>
-        <span class="value">00:00</span>
-    </div>
+  <div class="score">
+    <span class="label">Score:</span>
+    <span class="value">0</span>
+  </div>
+  <div class="title">
+    <h1>SNAKE GAME</h1>
+  </div>
+  <div class="time">
+    <span class="label">Time:</span>
+    <span class="value">00:00</span>
+  </div>
 </div>
+
 <div id="tinguIntro" class="intro-overlay">
-    <div class="intro-content">
-        <div id="tinguSnake" class="tingu-snake">
-        <div class="tingu-body"></div>
-        <div class="tingu-head"></div>
-        <div class="eye left"></div>
-        <div class="eye right"></div>
-        <div class="tongue"></div>
+  <div class="intro-content">
+    <div id="tinguSnake" class="tingu-snake">
+      <div class="tingu-body"></div>
+      <div class="tingu-head"></div>
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="tongue"></div>
     </div>
-
     <div id="tinguText" class="intro-text"></div>
-
     <button id="startGameBtn" style="opacity:0;">Start</button>
   </div>
 </div>
+
 <div class="canvas-wrapper">
 
-    <!-- GAME OVER -->
-    <div id="gameOverOverlay" class="hidden">
-        <div class="overlay-content">
-            <h2 id="overlayTitle">Game Over</h2>
-
-            <p class="overlay-score">
-                Score: <span id="finalScore">0</span>
-            </p>
-
-            <p class="overlay-score">
-                High Score: <span id="finalHighScore">0</span>
-            </p>
-
-            <p id="tinguMessage" class="tingu-text"></p>
-
-            <div class="button-group">
-  <button id="restartBtn" class="overlay-btn continue-btn">
-    Restart
-  </button>
-
-  <button id="gameOverQuitBtn" class="overlay-btn quit-btn">
-    Quit
-  </button>
-</div>
-        </div>
-        <div id="quitOverlay" class="hidden">
-            <div class="overlay-content">
-                <h2>Quit Game?</h2>
-                    <p class="overlay-score">
-                         All progress will be lost.
-                    </p>
-            <button id="continueBtn">Continue</button>
-            <button id="quitBtn" class="overlay-btn quit-btn">Quit</button>
+  <!-- GAME OVER -->
+  <div id="gameOverOverlay" class="hidden">
+    <div class="overlay-content">
+      <h2 id="overlayTitle">Game Over</h2>
+      <p class="overlay-score">
+        Score: <span id="finalScore">0</span>
+      </p>
+      <p class="overlay-score">
+        High Score: <span id="finalHighScore">0</span>
+      </p>
+      <p id="tinguMessage" class="tingu-text"></p>
+      <div class="button-group">
+        <button id="restartBtn" class="overlay-btn continue-btn">Restart</button>
+        <button id="gameOverQuitBtn" class="overlay-btn quit-btn">Quit</button>
+      </div>
     </div>
-</div>
-    </div>
+  </div>
 
-    <canvas id="bgCanvas"></canvas>
-    <canvas id="gameCanvas"></canvas>
+  <div id="quitOverlay" class="hidden">
+    <div class="overlay-content">
+      <h2>Quit Game?</h2>
+      <p class="overlay-score">All progress will be lost.</p>
+      <button id="continueBtn">Continue</button>
+      <button id="quitBtn" class="overlay-btn quit-btn">Quit</button>
+    </div>
+  </div>
+
+  <canvas id="bgCanvas"></canvas>
+  <canvas id="gameCanvas"></canvas>
 
 </div>
 
 <div class="controls">
-    <div class="dpad">
-        <button id="upBtn" class="dpad-btn up">▲</button>
-        <button id="leftBtn" class="dpad-btn left">◀</button>
-        <button id="rightBtn" class="dpad-btn right">▶</button>
-        <button id="downBtn" class="dpad-btn down">▼</button>
-    </div>
-</div>
-<div id="rotateOverlay" class="hidden">
-    
-  <div class="overlay-content">
-    <h2>Please Rotate Device</h2>
-    <p class="overlay-score">
-      This game is best played in portrait mode.
-    </p>
+  <div class="dpad">
+    <button id="upBtn"    class="dpad-btn up">▲</button>
+    <button id="leftBtn"  class="dpad-btn left">◀</button>
+    <button id="rightBtn" class="dpad-btn right">▶</button>
+    <button id="downBtn"  class="dpad-btn down">▼</button>
   </div>
 </div>
-<script src="canvas.js"></script>
 
+<div id="rotateOverlay" class="hidden">
+  <div class="overlay-content">
+    <h2>Please Rotate Device</h2>
+    <p class="overlay-score">This game is best played in portrait mode.</p>
+  </div>
+</div>
+
+<script src="canvas.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 const params = new URLSearchParams(window.location.search);
 const username = params.get("username") || "Guest";
 window.playerName = username;
-
+localStorage.setItem("snakeUsername", window.playerName);
 console.log("Logged in as:", window.playerName);
 const canvas = document.getElementById("gameCanvas");
 const c = canvas.getContext("2d");
@@ -55,7 +55,7 @@ window.addEventListener("resize", () => {
 
 // ================= GAME SETTINGS =================
 
-const MAX_LENGTH = 15;
+const MAX_LENGTH = 12;
 const SEGMENT_SPACING = 6;
 
 let score = 0;
@@ -87,7 +87,7 @@ function resetSnake() {
   const centerX = size / 2;
   const centerY = size / 2;
 
-  for (let i = 0; i < targetLength * 6; i++) {
+  for (let i = 0; i < targetLength * 4; i++) {
     snake.push({
       x: centerX - i * SEGMENT_SPACING,
       y: centerY,
@@ -579,7 +579,7 @@ function restartGame() {
 
   velocity = { x: 0, y: 0 };
   gameStarted = false;
-  gameActive = window.innerWidth <= window.innerHeight;
+  gameActive = true;
 
   resetSnake();
   placeFood();
@@ -592,15 +592,21 @@ function restartGame() {
 }
 
 restartBtn.addEventListener("click", restartGame);
+//document.getElementById("gameOverQuitBtn").addEventListener("click", () => {
+ // window.location.href = "../thankyou.html";
+//});
 document.getElementById("gameOverQuitBtn").addEventListener("click", () => {
-  window.location.href = "../thankyou.html";
+  document.body.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = "../thankyou.html";
+  }, 400);
 });
-document.getElementById("gameOverQuitBtn").addEventListener("click", () => {
-  window.location.href = "../thankyou.html";
-});
-document.getElementById("quitBtn").addEventListener("click", () => {
-  window.location.href = "../thankyou.html";
-});
+//document.getElementById("quitBtn").addEventListener("click", () => {
+//  window.location.href = "../thankyou.html";
+//});
+
+
 
 // ================= ANIMATION =================
 
@@ -669,7 +675,7 @@ addMobileControl(rightBtn, { x: 1, y: 0 });
 // ================= INTRO OVERLAY =================
 
 const introLines = [
-  "hi",
+  "hi " + window.playerName,
   "nenu tingu",
   "naku akali ekkuvoy",
   "naku ekkuva gudlu pettali",
@@ -777,6 +783,18 @@ const quitOverlay = document.getElementById("quitOverlay");
 const continueBtn = document.getElementById("continueBtn");
 const quitBtn = document.getElementById("quitBtn");
 
+continueBtn.addEventListener("click", () => {
+  hideQuitOverlay();
+});
+
+quitBtn.addEventListener("click", () => {
+  document.body.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = "../thankyou.html";
+  }, 400);
+});
+
 function showQuitOverlay() {
   quitOverlay.classList.remove("hidden");
   quitOverlay.classList.add("show");
@@ -792,9 +810,7 @@ continueBtn.addEventListener("click", () => {
   hideQuitOverlay();
 });
 
-quitBtn.addEventListener("click", () => {
-  window.location.href = "Leaderboard.html";
-});
+
 
 // =============  ARE YOU SURE YOU WANT TO QUIT OVERLAY =======//
 
