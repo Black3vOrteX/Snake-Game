@@ -440,3 +440,19 @@ canvas {
   from { transform: scaleX(1); }
   to { transform: scaleX(1.5); }
 }
+
+.quit-btn {
+  background: transparent;
+  border: 2px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: all 0.25s ease;
+}
+
+.quit-btn:hover {
+  background: #ff4d4d;
+  color: #0b1120;
+  box-shadow: 0 0 15px #ff4d4d;
+}

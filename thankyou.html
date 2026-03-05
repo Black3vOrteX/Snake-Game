@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Thanks for Playing</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap');
+
+    :root {
+      --teal: #5eead4;
+      --teal-dim: rgba(94,234,212,0.15);
+      --cyan: #00f5ff;
+      --green: #00cc88;
+      --bg: #05080f;
+      --card-bg: rgba(17,24,39,0.95);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100dvh;
+      background: var(--bg);
+      font-family: 'Share Tech Mono', monospace;
+      color: white;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Ambient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(0,245,255,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(94,234,212,0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 80%, rgba(0,204,136,0.04) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scanline overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Tingu snake */
+    .tingu-wrap {
+      position: relative;
+      width: 140px;
+      height: 80px;
+    }
+
+    .tingu-body {
+      position: absolute;
+      width: 90px;
+      height: 50px;
+      left: 0;
+      top: 20px;
+      background: linear-gradient(135deg, #0088ff, #0044ff);
+      border-radius: 50px;
+      filter: blur(2px);
+      opacity: 0.7;
+    }
+
+    .tingu-head {
+      position: absolute;
+      width: 95px;
+      height: 70px;
+      left: 40px;
+      top: 5px;
+      background: linear-gradient(135deg, #00f5ff, #0099ff);
+      border-radius: 60% 70% 55% 55%;
+      box-shadow: 0 0 25px #00f5ff, 0 0 50px #0099ff;
+    }
+
+    .eye {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: black;
+      border-radius: 50%;
+      top: 32px;
+      z-index: 3;
+    }
+    .eye.left { left: 85px; }
+    .eye.right { left: 100px; }
+
+    .tongue {
+      position: absolute;
+      width: 14px;
+      height: 3px;
+      background: #ff2e63;
+      left: 130px;
+      top: 42px;
+      border-radius: 3px;
+      animation: flicker 0.7s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { transform: scaleX(1); }
+      to { transform: scaleX(1.5); }
+    }
+
+    /* Tingu enter animation */
+    .tingu-wrap {
+      opacity: 0;
+      transform: translateX(-160px);
+      transition: transform 0.7s cubic-bezier(.68,-0.55,.27,1.55), opacity 0.4s ease;
+    }
+    .tingu-wrap.visible {
+      opacity: 1;
+      transform: translateX(0);
+      animation: wiggle 1.2s ease-in-out infinite alternate 0.7s;
+    }
+
+    @keyframes wiggle {
+      from { transform: rotate(-4deg) translateY(0px); }
+      to   { transform: rotate(4deg) translateY(-4px); }
+    }
+
+    /* Typewriter message */
+    .tingu-message {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 15px;
+      color: var(--cyan);
+      text-shadow: 0 0 8px var(--cyan), 0 0 20px rgba(0,245,255,0.4);
+      text-align: center;
+      line-height: 1.7;
+      min-height: 60px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: var(--cyan);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* Stats card */
+    .stats-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid rgba(94,234,212,0.2);
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow:
+        0 0 20px rgba(94,234,212,0.1),
+        0 0 40px rgba(94,234,212,0.05);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .stats-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stats-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(94,234,212,0.5);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--teal);
+      text-shadow: 0 0 12px rgba(94,234,212,0.6);
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+      display: block;
+      letter-spacing: 1px;
+    }
+
+    .stat-divider {
+      grid-column: 1 / -1;
+      height: 1px;
+      background: rgba(94,234,212,0.1);
+    }
+
+    /* Roast tier badge */
+    .tier-badge {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      font-family: 'Share Tech Mono', monospace;
+      margin-top: 4px;
+      border: 1px solid;
+    }
+
+    /* Sign off */
+    .signoff {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: rgba(94,234,212,0.35);
+      text-align: center;
+      letter-spacing: 2px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="tingu-wrap" id="tinguSnake">
+    <div class="tingu-body"></div>
+    <div class="tingu-head"></div>
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="tongue"></div>
+  </div>
+
+  <div class="tingu-message" id="tinguMsg"><span class="cursor"></span></div>
+
+  <div class="stats-card" id="statsCard">
+    <div class="stats-title">Session Report</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-value" id="statScore">0</span>
+        <span class="stat-label">THIS RUN</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="statHigh">0</span>
+        <span class="stat-label">BEST EVER</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value" id="statGames">0</span>
+        <span class="stat-label">GAMES PLAYED</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="statRoasts">0</span>
+        <span class="stat-label">TIMES ROASTED</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:16px;">
+      <span class="tier-badge" id="tierBadge">—</span>
+    </div>
+  </div>
+
+  <div class="signoff">— tingu out —</div>
+
+</div>
+
+<script>
+  const score      = Number(localStorage.getItem("snakeLastScore"))    || 0;
+  const highScore  = Number(localStorage.getItem("snakeHighScore"))    || 0;
+  const games      = Number(localStorage.getItem("snakeGamesPlayed"))  || 0;
+  const roasts     = Number(localStorage.getItem("snakeRoastCount"))   || 0;
+
+  document.getElementById("statScore").textContent  = score;
+  document.getElementById("statHigh").textContent   = highScore;
+  document.getElementById("statGames").textContent  = games;
+  document.getElementById("statRoasts").textContent = roasts;
+
+  // Tier badge based on high score
+  function getTier(s) {
+    if (s >= 60) return { label: "LEGEND TIER",   color: "#facc15", bg: "rgba(250,204,21,0.1)" };
+    if (s >= 45) return { label: "ELITE TIER",    color: "#a855f7", bg: "rgba(168,85,247,0.1)" };
+    if (s >= 30) return { label: "HIGH TIER",     color: "#5eead4", bg: "rgba(94,234,212,0.1)" };
+    if (s >= 15) return { label: "MID TIER",      color: "#3b82f6", bg: "rgba(59,130,246,0.1)" };
+    if (s >= 5)  return { label: "LOW TIER",      color: "#00cc88", bg: "rgba(0,204,136,0.1)"  };
+    return              { label: "TINGU BAIT",    color: "#ff4d4d", bg: "rgba(255,77,77,0.1)"  };
+  }
+
+  const tier = getTier(highScore);
+  const badge = document.getElementById("tierBadge");
+  badge.textContent = tier.label;
+  badge.style.color = tier.color;
+  badge.style.borderColor = tier.color;
+  badge.style.background = tier.bg;
+  badge.style.boxShadow = `0 0 10px ${tier.color}44`;
+
+  // Goodbye messages by tier
+  const goodbyeLines = {
+    god:   ["60 reach chesav.", "tingu ki namaskaaram.", "vacche sari intha easy undadu."],
+    elite: ["solid run.", "45 daatav… respect undi.", "tingu approve chesadu."],
+    high:  ["30 cross chesav, not bad.", "tingu ni impress chesav konchem.", "next time inka better cheseyyi."],
+    mid:   ["15 daakaav… okay.", "practice chesthe improve avutundi.", "tingu chustunnadu."],
+    low:   ["5 daakaav at least.", "tingu naaku hairaana ga undi.", "try again cheyyi… please."],
+    bad:   ["...idi aa?", "tingu embarrassed ga feel avutunnadu.", "neenu tingu ni disappoint chesav."]
+  };
+
+  function pickLine(lines) {
+    return lines[Math.floor(Math.random() * lines.length)];
+  }
+
+  let lines;
+  if (highScore >= 60)     lines = goodbyeLines.god;
+  else if (highScore >= 45) lines = goodbyeLines.elite;
+  else if (highScore >= 30) lines = goodbyeLines.high;
+  else if (highScore >= 15) lines = goodbyeLines.mid;
+  else if (highScore >= 5)  lines = goodbyeLines.low;
+  else                      lines = goodbyeLines.bad;
+
+  const farewell = pickLine(lines);
+
+  // Tingu slides in
+  const snake = document.getElementById("tinguSnake");
+  setTimeout(() => snake.classList.add("visible"), 300);
+
+  // Typewriter
+  const msgEl = document.getElementById("tinguMsg");
+  function typeMessage(text, onDone) {
+    msgEl.innerHTML = "";
+    let i = 0;
+    const cursor = document.createElement("span");
+    cursor.className = "cursor";
+    msgEl.appendChild(cursor);
+
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        msgEl.insertBefore(document.createTextNode(text[i]), cursor);
+        i++;
+      } else {
+        clearInterval(interval);
+        setTimeout(() => cursor.remove(), 800);
+        if (onDone) setTimeout(onDone, 900);
+      }
+    }, 45);
+  }
+
+  // Sequence: type two lines, then show stats
+  const line1 = "thanks for playing.";
+  typeMessage(line1, () => {
+    setTimeout(() => {
+      typeMessage(farewell, () => {
+        document.getElementById("statsCard").classList.add("visible");
+      });
+    }, 300);
+  });
+</script>
+</body>
+</html>

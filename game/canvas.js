@@ -358,6 +358,18 @@ function gameOver(reason) {
     localStorage.setItem("snakeHighScore", highScore);
   }
 
+  localStorage.setItem("snakeLastScore", score);
+
+localStorage.setItem(
+  "snakeGamesPlayed",
+  (Number(localStorage.getItem("snakeGamesPlayed")) || 0) + 1
+);
+
+localStorage.setItem(
+  "snakeRoastCount",
+  (Number(localStorage.getItem("snakeRoastCount")) || 0) + 1
+);
+
   overlayTitle.textContent =
     reason === "time" ? "Time Up" : "Game Over";
 
@@ -478,6 +490,15 @@ function restartGame() {
 }
 
 restartBtn.addEventListener("click", restartGame);
+document.getElementById("gameOverQuitBtn").addEventListener("click", () => {
+  window.location.href = "../thankyou.html";
+});
+document.getElementById("gameOverQuitBtn").addEventListener("click", () => {
+  window.location.href = "../thankyou.html";
+});
+document.getElementById("quitBtn").addEventListener("click", () => {
+  window.location.href = "../thankyou.html";
+});
 
 // ================= ANIMATION =================
 
