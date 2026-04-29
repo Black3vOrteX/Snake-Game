@@ -1,4 +1,3 @@
-
 const params = new URLSearchParams(window.location.search);
 const username = params.get("username") || "Guest";
 window.playerName = username;
@@ -26,14 +25,11 @@ startGameBtn.addEventListener("click", () => {
   gameInitialized = true;
   restartGame();
 
-  
-  
 });
 
 overlay.classList.remove("show");
 overlay.classList.add("hidden");
 const SESSION_DURATION = 80;
-
 
 // ================= RESPONSIVE SIZE =================
 
@@ -405,10 +401,7 @@ localStorage.setItem(
   sendScoreToLeaderboard(score);
 }
 
-
 // ================= Send score to leaderboard =================
-
-
 
 function sendScoreToLeaderboard(finalScore) {
     if (scoreSent) return;
@@ -539,9 +532,6 @@ function getTinguMessage(score, reason) {
 
   let result = "";
 
-  
-
-  
   if (reason === "wall") {
   if (score < 5) return random(messages.wallLow);
   if (score < 15) return random(messages.wallMid);
@@ -605,12 +595,7 @@ document.getElementById("gameOverQuitBtn").addEventListener("click", () => {
 //document.getElementById("quitBtn").addEventListener("click", () => {
 //  window.location.href = "../thankyou.html";
 //});
-
-
-
 // ================= ANIMATION =================
-
-
 
 let lastTime = 0;
 const fps = 30;
@@ -666,9 +651,6 @@ addMobileControl(upBtn, { x: 0, y: -1 });
 addMobileControl(downBtn, { x: 0, y: 1 });
 addMobileControl(leftBtn, { x: -1, y: 0 });
 addMobileControl(rightBtn, { x: 1, y: 0 });
-
-// ================= BACK BUTTON HANDLER =================
-
 
 // ================= INTRO OVERLAY =================
 
@@ -771,10 +753,6 @@ if (screen.orientation) {
   screen.orientation.addEventListener("change", checkOrientation);
 }
 
-
-
-
-
 // =========== QUIT OVERLAY ===============
 
 const quitOverlay = document.getElementById("quitOverlay");
@@ -808,12 +786,7 @@ continueBtn.addEventListener("click", () => {
   hideQuitOverlay();
 });
 
-
-
 // =============  ARE YOU SURE YOU WANT TO QUIT OVERLAY =======//
-
-
-
 window.addEventListener("popstate", function () {
 
   if (gameInitialized) {
@@ -821,7 +794,4 @@ window.addEventListener("popstate", function () {
   }
   history.pushState(null, null, location.href);
 });
-
-  
-  
 ;
